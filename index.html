@@ -76,17 +76,13 @@
         <form id="create-server-form">
             <label for="server-name" id="server-name-label">Название сервера:</label>
             <input type="text" id="server-name" name="server-name" required>
+            <label for="server-ip" id="server-ip-label">Введите IP-адрес сервера:</label>
+            <input type="text" id="server-ip-input" name="server-ip" required>
             <button type="submit" id="create-server-button">Создать сервер</button>
         </form>
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
-            <p id="server-ip"></p>
-            <p id="server-version-info"></p>
-            <form id="add-admin-form">
-                <label for="admin-username" id="admin-username-label">Введите имя администратора:</label>
-                <input type="text" id="admin-username" name="admin-username" required>
-                <button type="submit" id="add-admin-button">Добавить администратора</button>
-            </form>
+            <p id="server-ip-display"></p>
             <form id="upload-plugin-form" enctype="multipart/form-data">
                 <label for="plugin" id="plugin-label">Выберите плагин:</label>
                 <input type="file" id="plugin" name="plugin" accept=".jar" required>
@@ -108,10 +104,9 @@
                 title: "Бесплатный хост: Создание серверов Ldo-Host",
                 subtitle: "От создателей Lock Darkman Online",
                 serverNameLabel: "Название сервера:",
+                serverIpLabel: "Введите IP-адрес сервера:",
                 createServerButton: "Создать сервер",
                 serverInfoTitle: "Информация о сервере",
-                adminUsernameLabel: "Введите имя администратора:",
-                addAdminButton: "Добавить администратора",
                 pluginLabel: "Выберите плагин:",
                 uploadPluginButton: "Загрузить плагин",
                 modLabel: "Выберите мод:",
@@ -121,10 +116,9 @@
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
                 subtitle: "Від творців Lock Darkman Online",
                 serverNameLabel: "Назва сервера:",
+                serverIpLabel: "Введіть IP-адресу сервера:",
                 createServerButton: "Створити сервер",
                 serverInfoTitle: "Інформація про сервер",
-                adminUsernameLabel: "Введіть ім'я адміністратора:",
-                addAdminButton: "Додати адміністратора",
                 pluginLabel: "Оберіть плагін:",
                 uploadPluginButton: "Завантажити плагін",
                 modLabel: "Оберіть мод:",
@@ -134,10 +128,9 @@
                 title: "Free Host: Creating Ldo-Host Servers",
                 subtitle: "From the creators of Lock Darkman Online",
                 serverNameLabel: "Server Name:",
+                serverIpLabel: "Enter Server IP Address:",
                 createServerButton: "Create Server",
                 serverInfoTitle: "Server Information",
-                adminUsernameLabel: "Enter Admin Username:",
-                addAdminButton: "Add Admin",
                 pluginLabel: "Select Plugin:",
                 uploadPluginButton: "Upload Plugin",
                 modLabel: "Select Mod:",
@@ -150,10 +143,9 @@
             document.getElementById("title").innerText = translations[language].title;
             document.getElementById("subtitle").innerText = translations[language].subtitle;
             document.getElementById("server-name-label").innerText = translations[language].serverNameLabel;
+            document.getElementById("server-ip-label").innerText = translations[language].serverIpLabel;
             document.getElementById("create-server-button").innerText = translations[language].createServerButton;
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
-            document.getElementById("admin-username-label").innerText = translations[language].adminUsernameLabel;
-            document.getElementById("add-admin-button").innerText = translations[language].addAdminButton;
             document.getElementById("plugin-label").innerText = translations[language].pluginLabel;
             document.getElementById("upload-plugin-button").innerText = translations[language].uploadPluginButton;
             document.getElementById("mod-label").innerText = translations[language].modLabel;
@@ -163,19 +155,9 @@
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
-            const serverIP = generateServerIP();
-            document.getElementById('server-ip').innerText = `IP сервера: ${serverIP}`;
+            const serverIp = document.getElementById('server-ip-input').value;
+            document.getElementById('server-ip-display').innerText = `IP сервера: ${serverIp}`;
             document.getElementById('server-info').style.display = 'block';
-        });
-
-        function generateServerIP() {
-            return '123.456.789.' + Math.floor(Math.random() * 1000) + '.credesasq.host';
-        }
-
-        document.getElementById('add-admin-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const adminUsername = document.getElementById('admin-username').value;
-            alert(`Администратор ${adminUsername} успешно добавлен на сервер!`);
         });
 
         document.getElementById('upload-plugin-form').addEventListener('submit', function(event) {
