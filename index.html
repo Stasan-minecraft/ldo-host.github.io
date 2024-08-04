@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine-Host</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: #fff;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #111;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1 {
+            text-align: center;
+            color: #e74c3c;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #e74c3c;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            background-color: #111;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #e74c3c;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mine-Host: Сервера и Плагины</h1>
+        <button onclick="createExcel()">Создать и скачать Excel-файл</button>
+        <input type="file" id="fileUpload" accept=".xlsx" style="display:none;">
+        <table id="server-table">
+            <thead>
+                <tr>
+                    <th>IP-адрес сервера</th>
+                    <th>Название сервера</th>
+                    <th>Плагины</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Данные будут загружены здесь с помощью JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Скрипт для обработки Excel файлов -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <!-- Скрипт для создания Excel файла -->
+    <script>
+        function createExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            const servers = [
+                ['IP-адрес сервера', 'Название сервера'],
+                ['123.456.789.001', 'Сервер 1'],
+                ['123.456.789.002', 'Сервер 2']
+            ];
+
+            const plugins = [
+                ['IP-адрес сервера', 'Название плагина', 'Ссылка на плагин'],
+                ['123.456.789.001', 'Plugin 1', 'http://example.com/plugin1.jar'],
+                ['123.456.789.001', 'Plugin 2', 'http://example.com/plugin2.jar'],
+                ['123.456.789.002', 'Plugin 3', 'http://example.com/plugin3.jar']
+            ];
+
+            const wsServers = XLSX.utils.aoa_to_sheet(servers);
+            const wsPlugins = XLSX.utils.aoa_to_sheet(plugins);
+
+            XLSX.utils.book_append_sheet(wb, wsServers, 'Сервера');
+            XLSX.utils.book_append_sheet(wb, wsPlugins, 'Плагины');
+
+            XLSX.writeFile(wb, 'MineHost.xlsx');
+        }
+    </script>
+    <!-- Скрипт для загрузки и обработки Excel файла -->
+    <script>
+        document.getElementById('fileUpload').addEventListener('change', handleFile, false);
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                processExcel(workbook);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processExcel(workbook) {
+            const serversSheet = workbook.Sheets['Сервера'];
+            const pluginsSheet = workbook.Sheets['Плагины'];
+            const servers = XLSX.utils.sheet_to_json(serversSheet);
+            const plugins = XLSX.utils.sheet_to_json(pluginsSheet);
+
+            const serverTableBody = document.getElementById('server-table').querySelector('tbody');
+            serverTableBody.innerHTML = '';
+
+            servers.forEach(server => {
+                const row = document.createElement('tr');
+                const pluginsForServer = plugins.filter(plugin => plugin['IP-адрес сервера'] === server['IP-адрес сервера'])
+                                                .map(plugin => plugin['Название плагина']).join(', ');
+
+                row.innerHTML = `
+                    <td>${server['IP-адрес сервера']}</td>
+                    <td>${server['Название сервера']}</td>
+                    <td>${pluginsForServer}</td>
+                `;
+                serverTableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
