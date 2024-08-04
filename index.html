@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mine-Host</title>
+    <title>Бесплатный хост: Создание серверов Mine-Host</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,15 +57,25 @@
             margin-top: 20px;
             color: #777;
         }
+        .language-selector {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Mine-Host: Создание сервера и загрузка плагинов/модов</h1>
+        <div class="language-selector">
+            <select id="language-select" onchange="changeLanguage()">
+                <option value="ru">Русский</option>
+                <option value="ua">Українська</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <h1 id="title">Бесплатный хост: Создание серверов Mine-Host</h1>
         <form id="create-server-form">
-            <label for="server-name">Название сервера:</label>
+            <label for="server-name" id="server-name-label">Название сервера:</label>
             <input type="text" id="server-name" name="server-name" required>
-            <label for="server-version">Выберите версию Minecraft:</label>
+            <label for="server-version" id="server-version-label">Выберите версию Minecraft:</label>
             <select id="server-version" name="server-version" required>
                 <option value="1.16.5">1.16.5</option>
                 <option value="1.17.1">1.17.1</option>
@@ -73,26 +83,26 @@
                 <option value="1.19.4">1.19.4</option>
                 <option value="1.20.1">1.20.1</option>
             </select>
-            <button type="submit">Создать сервер</button>
+            <button type="submit" id="create-server-button">Создать сервер</button>
         </form>
         <div class="server-info" id="server-info" style="display:none;">
-            <h2>Информация о сервере</h2>
+            <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip"></p>
             <p id="server-version-info"></p>
             <form id="add-admin-form">
-                <label for="admin-username">Введите имя администратора:</label>
+                <label for="admin-username" id="admin-username-label">Введите имя администратора:</label>
                 <input type="text" id="admin-username" name="admin-username" required>
-                <button type="submit">Добавить администратора</button>
+                <button type="submit" id="add-admin-button">Добавить администратора</button>
             </form>
             <form id="upload-plugin-form" enctype="multipart/form-data">
-                <label for="plugin">Выберите плагин:</label>
+                <label for="plugin" id="plugin-label">Выберите плагин:</label>
                 <input type="file" id="plugin" name="plugin" accept=".jar" required>
-                <button type="submit">Загрузить плагин</button>
+                <button type="submit" id="upload-plugin-button">Загрузить плагин</button>
             </form>
             <form id="upload-mod-form" enctype="multipart/form-data">
-                <label for="mod">Выберите мод:</label>
+                <label for="mod" id="mod-label">Выберите мод:</label>
                 <input type="file" id="mod" name="mod" accept=".jar" required>
-                <button type="submit">Загрузить мод</button>
+                <button type="submit" id="upload-mod-button">Загрузить мод</button>
             </form>
         </div>
         <div class="footer">
@@ -100,6 +110,63 @@
         </div>
     </div>
     <script>
+        const translations = {
+            ru: {
+                title: "Бесплатный хост: Создание серверов Mine-Host",
+                serverNameLabel: "Название сервера:",
+                serverVersionLabel: "Выберите версию Minecraft:",
+                createServerButton: "Создать сервер",
+                serverInfoTitle: "Информация о сервере",
+                adminUsernameLabel: "Введите имя администратора:",
+                addAdminButton: "Добавить администратора",
+                pluginLabel: "Выберите плагин:",
+                uploadPluginButton: "Загрузить плагин",
+                modLabel: "Выберите мод:",
+                uploadModButton: "Загрузить мод"
+            },
+            ua: {
+                title: "Безкоштовний хост: Створення серверів Mine-Host",
+                serverNameLabel: "Назва сервера:",
+                serverVersionLabel: "Оберіть версію Minecraft:",
+                createServerButton: "Створити сервер",
+                serverInfoTitle: "Інформація про сервер",
+                adminUsernameLabel: "Введіть ім'я адміністратора:",
+                addAdminButton: "Додати адміністратора",
+                pluginLabel: "Оберіть плагін:",
+                uploadPluginButton: "Завантажити плагін",
+                modLabel: "Оберіть мод:",
+                uploadModButton: "Завантажити мод"
+            },
+            en: {
+                title: "Free Host: Creating Minecraft Servers with Mine-Host",
+                serverNameLabel: "Server Name:",
+                serverVersionLabel: "Select Minecraft Version:",
+                createServerButton: "Create Server",
+                serverInfoTitle: "Server Information",
+                adminUsernameLabel: "Enter Admin Username:",
+                addAdminButton: "Add Admin",
+                pluginLabel: "Select Plugin:",
+                uploadPluginButton: "Upload Plugin",
+                modLabel: "Select Mod:",
+                uploadModButton: "Upload Mod"
+            }
+        };
+
+        function changeLanguage() {
+            const language = document.getElementById("language-select").value;
+            document.getElementById("title").innerText = translations[language].title;
+            document.getElementById("server-name-label").innerText = translations[language].serverNameLabel;
+            document.getElementById("server-version-label").innerText = translations[language].serverVersionLabel;
+            document.getElementById("create-server-button").innerText = translations[language].createServerButton;
+            document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
+            document.getElementById("admin-username-label").innerText = translations[language].adminUsernameLabel;
+            document.getElementById("add-admin-button").innerText = translations[language].addAdminButton;
+            document.getElementById("plugin-label").innerText = translations[language].pluginLabel;
+            document.getElementById("upload-plugin-button").innerText = translations[language].uploadPluginButton;
+            document.getElementById("mod-label").innerText = translations[language].modLabel;
+            document.getElementById("upload-mod-button").innerText = translations[language].uploadModButton;
+        }
+
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
@@ -129,6 +196,9 @@
             event.preventDefault();
             alert('Мод успешно загружен!');
         });
+
+        // Initialize the page with default language
+        changeLanguage();
     </script>
 </body>
 </html>
