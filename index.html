@@ -31,7 +31,7 @@
         label {
             color: #e74c3c;
         }
-        input[type="text"], input[type="file"] {
+        input[type="text"], input[type="file"], select {
             padding: 10px;
             border: 1px solid #e74c3c;
             border-radius: 5px;
@@ -52,6 +52,11 @@
         .server-info {
             margin-top: 20px;
         }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -60,11 +65,25 @@
         <form id="create-server-form">
             <label for="server-name">Название сервера:</label>
             <input type="text" id="server-name" name="server-name" required>
+            <label for="server-version">Выберите версию Minecraft:</label>
+            <select id="server-version" name="server-version" required>
+                <option value="1.16.5">1.16.5</option>
+                <option value="1.17.1">1.17.1</option>
+                <option value="1.18.2">1.18.2</option>
+                <option value="1.19.4">1.19.4</option>
+                <option value="1.20.1">1.20.1</option>
+            </select>
             <button type="submit">Создать сервер</button>
         </form>
         <div class="server-info" id="server-info" style="display:none;">
             <h2>Информация о сервере</h2>
             <p id="server-ip"></p>
+            <p id="server-version-info"></p>
+            <form id="add-admin-form">
+                <label for="admin-username">Введите имя администратора:</label>
+                <input type="text" id="admin-username" name="admin-username" required>
+                <button type="submit">Добавить администратора</button>
+            </form>
             <form id="upload-plugin-form" enctype="multipart/form-data">
                 <label for="plugin">Выберите плагин:</label>
                 <input type="file" id="plugin" name="plugin" accept=".jar" required>
@@ -76,19 +95,30 @@
                 <button type="submit">Загрузить мод</button>
             </form>
         </div>
+        <div class="footer">
+            Версия сайта: 1.4
+        </div>
     </div>
     <script>
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
+            const serverVersion = document.getElementById('server-version').value;
             const serverIP = generateServerIP();
             document.getElementById('server-ip').innerText = `IP сервера: ${serverIP}`;
+            document.getElementById('server-version-info').innerText = `Версия сервера: ${serverVersion}`;
             document.getElementById('server-info').style.display = 'block';
         });
 
         function generateServerIP() {
             return '123.456.789.' + Math.floor(Math.random() * 1000) + '.credesasq.host';
         }
+
+        document.getElementById('add-admin-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const adminUsername = document.getElementById('admin-username').value;
+            alert(`Администратор ${adminUsername} успешно добавлен на сервер!`);
+        });
 
         document.getElementById('upload-plugin-form').addEventListener('submit', function(event) {
             event.preventDefault();
