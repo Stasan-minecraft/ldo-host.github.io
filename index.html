@@ -72,15 +72,10 @@
             </select>
         </div>
         <h1 id="title">Бесплатный хост: Создание серверов Ldo-Host</h1>
+        <p id="subtitle">От создателей Lock Darkman Online</p>
         <form id="create-server-form">
             <label for="server-name" id="server-name-label">Название сервера:</label>
             <input type="text" id="server-name" name="server-name" required>
-            <label for="server-version" id="server-version-label">Выберите версию Lock Darkman Online:</label>
-            <select id="server-version" name="server-version" required>
-                <option value="1.0">1.0</option>
-                <option value="1.1">1.1</option>
-                <option value="2.0">2.0</option>
-            </select>
             <button type="submit" id="create-server-button">Создать сервер</button>
         </form>
         <div class="server-info" id="server-info" style="display:none;">
@@ -111,8 +106,8 @@
         const translations = {
             ru: {
                 title: "Бесплатный хост: Создание серверов Ldo-Host",
+                subtitle: "От создателей Lock Darkman Online",
                 serverNameLabel: "Название сервера:",
-                serverVersionLabel: "Выберите версию Lock Darkman Online:",
                 createServerButton: "Создать сервер",
                 serverInfoTitle: "Информация о сервере",
                 adminUsernameLabel: "Введите имя администратора:",
@@ -124,8 +119,8 @@
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
+                subtitle: "Від творців Lock Darkman Online",
                 serverNameLabel: "Назва сервера:",
-                serverVersionLabel: "Оберіть версію Lock Darkman Online:",
                 createServerButton: "Створити сервер",
                 serverInfoTitle: "Інформація про сервер",
                 adminUsernameLabel: "Введіть ім'я адміністратора:",
@@ -136,9 +131,9 @@
                 uploadModButton: "Завантажити мод"
             },
             en: {
-                title: "Free Host: Creating Lock Darkman Online Servers with Ldo-Host",
+                title: "Free Host: Creating Ldo-Host Servers",
+                subtitle: "From the creators of Lock Darkman Online",
                 serverNameLabel: "Server Name:",
-                serverVersionLabel: "Select Lock Darkman Online Version:",
                 createServerButton: "Create Server",
                 serverInfoTitle: "Server Information",
                 adminUsernameLabel: "Enter Admin Username:",
@@ -153,8 +148,8 @@
         function changeLanguage() {
             const language = document.getElementById("language-select").value;
             document.getElementById("title").innerText = translations[language].title;
+            document.getElementById("subtitle").innerText = translations[language].subtitle;
             document.getElementById("server-name-label").innerText = translations[language].serverNameLabel;
-            document.getElementById("server-version-label").innerText = translations[language].serverVersionLabel;
             document.getElementById("create-server-button").innerText = translations[language].createServerButton;
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
             document.getElementById("admin-username-label").innerText = translations[language].adminUsernameLabel;
@@ -168,10 +163,8 @@
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
-            const serverVersion = document.getElementById('server-version').value;
             const serverIP = generateServerIP();
             document.getElementById('server-ip').innerText = `IP сервера: ${serverIP}`;
-            document.getElementById('server-version-info').innerText = `Версия сервера: ${serverVersion}`;
             document.getElementById('server-info').style.display = 'block';
         });
 
