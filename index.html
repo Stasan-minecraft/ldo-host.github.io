@@ -11,7 +11,7 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            background: linear-gradient(135deg, #000000, #e74c3c);
             color: #ecf0f1;
             display: flex;
             justify-content: center;
@@ -22,7 +22,7 @@
             width: 100%;
             max-width: 800px;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: #000000;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             text-align: center;
@@ -51,7 +51,7 @@
             padding: 10px;
             border: none;
             border-radius: 5px;
-            background-color: #34495e;
+            background-color: #2c3e50;
             color: #ecf0f1;
             font-size: 1em;
             width: 100%;
@@ -86,7 +86,7 @@
         }
         .language-selector select {
             padding: 5px;
-            background-color: #34495e;
+            background-color: #2c3e50;
             color: #ecf0f1;
             border: none;
             border-radius: 5px;
@@ -95,7 +95,7 @@
             transition: background-color 0.3s;
         }
         .language-selector select:hover {
-            background-color: #2c3e50;
+            background-color: #34495e;
         }
         p#email-instruction {
             font-size: 1em;
@@ -125,16 +125,6 @@
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
-            <form id="upload-plugin-form" enctype="multipart/form-data">
-                <label for="plugin" id="plugin-label">Выберите плагин:</label>
-                <input type="file" id="plugin" name="plugin" accept=".jar" required>
-                <button type="submit" id="upload-plugin-button">Загрузить плагин</button>
-            </form>
-            <form id="upload-mod-form" enctype="multipart/form-data">
-                <label for="mod" id="mod-label">Выберите мод:</label>
-                <input type="file" id="mod" name="mod" accept=".jar" required>
-                <button type="submit" id="upload-mod-button">Загрузить мод</button>
-            </form>
         </div>
         <div class="footer">
             <span id="version-label">Версия сайта:</span> 2.1
@@ -150,10 +140,6 @@
                 serverIpLabel: "Введите IP-адрес сервера:",
                 createServerButton: "Создать сервер",
                 serverInfoTitle: "Информация о сервере",
-                pluginLabel: "Выберите плагин:",
-                uploadPluginButton: "Загрузить плагин",
-                modLabel: "Выберите мод:",
-                uploadModButton: "Загрузить мод",
                 versionLabel: "Версия сайта:",
                 emailInstruction: "Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com"
             },
@@ -164,10 +150,6 @@
                 serverIpLabel: "Введіть IP-адресу сервера:",
                 createServerButton: "Створити сервер",
                 serverInfoTitle: "Інформація про сервер",
-                pluginLabel: "Оберіть плагін:",
-                uploadPluginButton: "Завантажити плагін",
-                modLabel: "Оберіть мод:",
-                uploadModButton: "Завантажити мод",
                 versionLabel: "Версія сайту:",
                 emailInstruction: "Для створення сервера надішліть назву сервера та IP-адресу на пошту: stasikgnidan@gmail.com"
             },
@@ -178,10 +160,6 @@
                 serverIpLabel: "Enter Server IP Address:",
                 createServerButton: "Create Server",
                 serverInfoTitle: "Server Information",
-                pluginLabel: "Select Plugin:",
-                uploadPluginButton: "Upload Plugin",
-                modLabel: "Select Mod:",
-                uploadModButton: "Upload Mod",
                 versionLabel: "Site Version:",
                 emailInstruction: "To create a server, send the server name and IP address to: stasikgnidan@gmail.com"
             }
@@ -195,10 +173,6 @@
             document.getElementById("server-ip-label").innerText = translations[language].serverIpLabel;
             document.getElementById("create-server-button").innerText = translations[language].createServerButton;
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
-            document.getElementById("plugin-label").innerText = translations[language].pluginLabel;
-            document.getElementById("upload-plugin-button").innerText = translations[language].uploadPluginButton;
-            document.getElementById("mod-label").innerText = translations[language].modLabel;
-            document.getElementById("upload-mod-button").innerText = translations[language].uploadModButton;
             document.getElementById("version-label").innerText = translations[language].versionLabel;
             document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
         }
@@ -219,16 +193,6 @@
             const body = `Название сервера: ${serverName}\nIP сервера: ${serverIp}`;
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
-
-        document.getElementById('upload-plugin-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Плагин успешно загружен!');
-        });
-
-        document.getElementById('upload-mod-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Мод успешно загружен!');
-        });
 
         // Initialize the page with default language
         changeLanguage();
