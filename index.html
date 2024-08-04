@@ -6,59 +6,99 @@
     <title>Бесплатный хост: Создание серверов Ldo-Host</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #333;
-            color: #fff;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            width: 80%;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 800px;
             padding: 20px;
-            background-color: #111;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p#subtitle {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            color: #bdc3c7;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            gap: 15px;
         }
         label {
             color: #e74c3c;
+            font-size: 1.1em;
         }
         input[type="text"], input[type="file"], select {
             padding: 10px;
-            border: 1px solid #e74c3c;
+            border: none;
             border-radius: 5px;
-            background-color: #222;
-            color: #fff;
+            background-color: #34495e;
+            color: #ecf0f1;
+            font-size: 1em;
+            width: 100%;
+            max-width: 400px;
         }
         button {
-            padding: 10px;
+            padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
-            color: #fff;
+            color: #ecf0f1;
             border-radius: 5px;
+            font-size: 1.1em;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #c0392b;
         }
         .server-info {
             margin-top: 20px;
+            text-align: left;
+            width: 100%;
         }
         .footer {
-            text-align: center;
             margin-top: 20px;
-            color: #777;
+            color: #bdc3c7;
+            font-size: 0.9em;
         }
         .language-selector {
             text-align: right;
+            margin-bottom: 10px;
+        }
+        .language-selector select {
+            padding: 5px;
+            background-color: #34495e;
+            color: #ecf0f1;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .language-selector select:hover {
+            background-color: #2c3e50;
+        }
+        p#email-instruction {
+            font-size: 1em;
+            margin-top: 20px;
+            color: #bdc3c7;
         }
     </style>
 </head>
@@ -168,7 +208,15 @@
             serverIp = `${serverIp}.ldo.me`;
             document.getElementById('server-ip-display').innerText = `IP сервера: ${serverIp}`;
             document.getElementById('server-info').style.display = 'block';
+            sendEmail(serverName, serverIp);
         });
+
+        function sendEmail(serverName, serverIp) {
+            const email = 'stasikgnidan@gmail.com';
+            const subject = 'Новый сервер Ldo-Host';
+            const body = `Название сервера: ${serverName}\nIP сервера: ${serverIp}`;
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
 
         document.getElementById('upload-plugin-form').addEventListener('submit', function(event) {
             event.preventDefault();
