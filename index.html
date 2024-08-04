@@ -95,7 +95,7 @@
             </form>
         </div>
         <div class="footer">
-            Версия сайта: 1.7
+            Версия сайта: 1.8
         </div>
     </div>
     <script>
@@ -155,7 +155,8 @@
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
-            const serverIp = document.getElementById('server-ip-input').value;
+            let serverIp = document.getElementById('server-ip-input').value;
+            serverIp = `${serverIp}.ldo.me`;
             document.getElementById('server-ip-display').innerText = `IP сервера: ${serverIp}`;
             document.getElementById('server-info').style.display = 'block';
         });
