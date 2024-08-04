@@ -97,6 +97,7 @@
         <div class="footer">
             <span id="version-label">Версия сайта:</span> 1.9
         </div>
+        <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
     <script>
         const translations = {
@@ -111,7 +112,8 @@
                 uploadPluginButton: "Загрузить плагин",
                 modLabel: "Выберите мод:",
                 uploadModButton: "Загрузить мод",
-                versionLabel: "Версия сайта:"
+                versionLabel: "Версия сайта:",
+                emailInstruction: "Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -124,7 +126,8 @@
                 uploadPluginButton: "Завантажити плагін",
                 modLabel: "Оберіть мод:",
                 uploadModButton: "Завантажити мод",
-                versionLabel: "Версія сайту:"
+                versionLabel: "Версія сайту:",
+                emailInstruction: "Для створення сервера надішліть назву сервера та IP-адресу на пошту: stasikgnidan@gmail.com"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -137,7 +140,8 @@
                 uploadPluginButton: "Upload Plugin",
                 modLabel: "Select Mod:",
                 uploadModButton: "Upload Mod",
-                versionLabel: "Site Version:"
+                versionLabel: "Site Version:",
+                emailInstruction: "To create a server, send the server name and IP address to: stasikgnidan@gmail.com"
             }
         };
 
@@ -154,6 +158,7 @@
             document.getElementById("mod-label").innerText = translations[language].modLabel;
             document.getElementById("upload-mod-button").innerText = translations[language].uploadModButton;
             document.getElementById("version-label").innerText = translations[language].versionLabel;
+            document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
         }
 
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
@@ -163,15 +168,7 @@
             serverIp = `${serverIp}.ldo.me`;
             document.getElementById('server-ip-display').innerText = `IP сервера: ${serverIp}`;
             document.getElementById('server-info').style.display = 'block';
-            sendEmail(serverName, serverIp);
         });
-
-        function sendEmail(serverName, serverIp) {
-            const email = 'stasikgnidan@gmail.com';
-            const subject = 'Новый сервер Ldo-Host';
-            const body = `Название сервера: ${serverName}\nIP сервера: ${serverIp}`;
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
 
         document.getElementById('upload-plugin-form').addEventListener('submit', function(event) {
             event.preventDefault();
