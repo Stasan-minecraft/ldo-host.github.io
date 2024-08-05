@@ -216,7 +216,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.9
+            <span id="version-label">Версия сайта:</span> 2.9.1
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -359,7 +359,7 @@
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
             const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase());
 
-            if (account && (account.username.toLowerCase() === 'credesasq' || account.username.toUpperCase() === 'CREDESASQ')) {
+            if (account && account.role === 'admin') {
                 document.getElementById('admin-button').style.display = 'block';
             } else {
                 document.getElementById('admin-button').style.display = 'none';
