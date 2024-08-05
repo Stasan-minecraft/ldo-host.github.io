@@ -47,7 +47,7 @@
             color: #e74c3c;
             font-size: 1.1em;
         }
-        input[type="text"], input[type="file"], select {
+        input[type="text"], input[type="password"], select {
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -70,7 +70,7 @@
         button:hover {
             background-color: #c0392b;
         }
-        .server-info {
+        .server-info, .admin-panel, .login-panel, .register-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -115,17 +115,39 @@
         </div>
         <h1 id="title">Бесплатный хост: Создание серверов Ldo-Host</h1>
         <p id="subtitle">От создателей Lock Darkman Online</p>
-        <form id="create-server-form">
-            <label for="server-name" id="server-name-label">Название сервера:</label>
-            <input type="text" id="server-name" name="server-name" required>
-            <label for="server-ip" id="server-ip-label">Введите IP-адрес сервера:</label>
-            <input type="text" id="server-ip-input" name="server-ip" required>
-            <button type="submit" id="create-server-button">Создать сервер</button>
-        </form>
+        
+        <div class="register-panel">
+            <h2>Регистрация</h2>
+            <form id="register-form">
+                <label for="register-username">Имя пользователя:</label>
+                <input type="text" id="register-username" required>
+                <label for="register-password">Пароль:</label>
+                <input type="password" id="register-password" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+        
+        <div class="login-panel">
+            <h2>Вход</h2>
+            <form id="login-form">
+                <label for="login-username">Имя пользователя:</label>
+                <input type="text" id="login-username" required>
+                <label for="login-password">Пароль:</label>
+                <input type="password" id="login-password" required>
+                <button type="submit">Войти</button>
+            </form>
+        </div>
+        
+        <div class="admin-panel" id="admin-panel" style="display:none;">
+            <h2>Админ Панель</h2>
+            <p>Добро пожаловать, администратор!</p>
+        </div>
+        
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
         </div>
+        
         <div class="footer">
             <span id="version-label">Версия сайта:</span> 2.1
         </div>
@@ -141,7 +163,15 @@
                 createServerButton: "Создать сервер",
                 serverInfoTitle: "Информация о сервере",
                 versionLabel: "Версия сайта:",
-                emailInstruction: "Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com"
+                emailInstruction: "Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com",
+                registerHeader: "Регистрация",
+                loginHeader: "Вход",
+                adminHeader: "Админ Панель",
+                welcomeAdmin: "Добро пожаловать, администратор!",
+                usernameLabel: "Имя пользователя:",
+                passwordLabel: "Пароль:",
+                registerButton: "Зарегистрироваться",
+                loginButton: "Войти"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -151,7 +181,15 @@
                 createServerButton: "Створити сервер",
                 serverInfoTitle: "Інформація про сервер",
                 versionLabel: "Версія сайту:",
-                emailInstruction: "Для створення сервера надішліть назву сервера та IP-адресу на пошту: stasikgnidan@gmail.com"
+                emailInstruction: "Для створення сервера надішліть назву сервера та IP-адресу на пошту: stasikgnidan@gmail.com",
+                registerHeader: "Реєстрація",
+                loginHeader: "Вхід",
+                adminHeader: "Адмін Панель",
+                welcomeAdmin: "Ласкаво просимо, адміністратор!",
+                usernameLabel: "Ім'я користувача:",
+                passwordLabel: "Пароль:",
+                registerButton: "Зареєструватися",
+                loginButton: "Увійти"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -161,7 +199,15 @@
                 createServerButton: "Create Server",
                 serverInfoTitle: "Server Information",
                 versionLabel: "Site Version:",
-                emailInstruction: "To create a server, send the server name and IP address to: stasikgnidan@gmail.com"
+                emailInstruction: "To create a server, send the server name and IP address to: stasikgnidan@gmail.com",
+                registerHeader: "Register",
+                loginHeader: "Login",
+                adminHeader: "Admin Panel",
+                welcomeAdmin: "Welcome, Administrator!",
+                usernameLabel: "Username:",
+                passwordLabel: "Password:",
+                registerButton: "Register",
+                loginButton: "Login"
             }
         };
 
@@ -175,24 +221,63 @@
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
             document.getElementById("version-label").innerText = translations[language].versionLabel;
             document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
+
+            // Update registration and login panel texts
+            document.querySelector('.register-panel h2').innerText = translations[language].registerHeader;
+            document.querySelector('.login-panel h2').innerText = translations[language].loginHeader;
+            document.getElementById("register-username").placeholder = translations[language].usernameLabel;
+            document.getElementById("register-password").placeholder = translations[language].passwordLabel;
+            document.getElementById("login-username").placeholder = translations[language].usernameLabel;
+            document.getElementById("login-password").placeholder = translations[language].passwordLabel;
+            document.getElementById("register-form button").innerText = translations[language].registerButton;
+            document.getElementById("login-form button").innerText = translations[language].loginButton;
+
+            // Update admin panel texts
+            document.querySelector('.admin-panel h2').innerText = translations[language].adminHeader;
+            document.querySelector('.admin-panel p').innerText = translations[language].welcomeAdmin;
         }
 
-        document.getElementById('create-server-form').addEventListener('submit', function(event) {
+        // Registration
+        document.getElementById('register-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const serverName = document.getElementById('server-name').value;
-            let serverIp = document.getElementById('server-ip-input').value;
-            serverIp = `${serverIp}.ldo.me`;
-            document.getElementById('server-ip-display').innerText = `IP сервера: ${serverIp}`;
-            document.getElementById('server-info').style.display = 'block';
-            sendEmail(serverName, serverIp);
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            
+            if (accounts.find(account => account.username === username)) {
+                alert('Username already exists');
+                return;
+            }
+
+            accounts.push({ username, password });
+            localStorage.setItem('accounts', JSON.stringify(accounts));
+
+            alert('Registration successful');
+            document.getElementById('register-form').reset();
         });
 
-        function sendEmail(serverName, serverIp) {
-            const email = 'stasikgnidan@gmail.com';
-            const subject = 'Новый сервер Ldo-Host';
-            const body = `Название сервера: ${serverName}\nIP сервера: ${serverIp}`;
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
+        // Login
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+
+            const account = accounts.find(account => account.username === username && account.password === password);
+
+            if (account) {
+                alert('Login successful');
+                if (username.toLowerCase() === 'credesasq') {
+                    document.getElementById('admin-panel').style.display = 'block';
+                }
+            } else {
+                alert('Invalid username or password');
+            }
+
+            document.getElementById('login-form').reset();
+        });
 
         // Initialize the page with default language
         changeLanguage();
