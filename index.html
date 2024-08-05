@@ -126,6 +126,11 @@
             margin-bottom: 10px;
             color: #ecf0f1;
         }
+        .admin-server-list {
+            margin-top: 40px;
+            border-top: 2px solid #e74c3c;
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -202,8 +207,13 @@
             <p id="server-ip-display"></p>
         </div>
         
+        <div class="admin-server-list" id="admin-server-list">
+            <h2>Серверы, созданные через админ панель</h2>
+            <div class="server-list" id="admin-created-server-list"></div>
+        </div>
+        
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.8.2
+            <span id="version-label">Версия сайта:</span> 2.8.3
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -354,6 +364,9 @@
 
             // Display user servers
             displayUserServers(username);
+
+            // Display admin-created servers
+            displayAdminServers();
         }
 
         function displayUserServers(username) {
@@ -366,6 +379,18 @@
                 serverItem.classList.add('server-item');
                 serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
                 serverList.appendChild(serverItem);
+            });
+        }
+
+        function displayAdminServers() {
+            let servers = JSON.parse(localStorage.getItem('servers')) || [];
+            const adminServerList = document.getElementById('admin-created-server-list');
+            adminServerList.innerHTML = '';
+            servers.forEach(server => {
+                let serverItem = document.createElement('div');
+                serverItem.classList.add('server-item');
+                serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
+                adminServerList.appendChild(serverItem);
             });
         }
 
