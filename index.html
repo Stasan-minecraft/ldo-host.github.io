@@ -180,7 +180,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.7
+            <span id="version-label">Версия сайта:</span> 2.7.1
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -321,7 +321,7 @@
             document.getElementById('profile-username').innerText = username;
 
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-            const account = accounts.find(account => account.username === username);
+            const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase());
 
             if (account && account.role === 'admin') {
                 document.getElementById('admin-button').style.display = 'block';
@@ -355,14 +355,14 @@
             
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
             
-            if (accounts.find(account => account.username === username)) {
+            if (accounts.find(account => account.username.toLowerCase() === username.toLowerCase())) {
                 alert('Username already exists');
                 return;
             }
 
             let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
 
-            if (bannedUsers.includes(username)) {
+            if (bannedUsers.includes(username.toLowerCase())) {
                 alert('Ошибка: пользователь забанен');
                 return;
             }
@@ -382,14 +382,14 @@
 
             let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
 
-            if (bannedUsers.includes(username)) {
+            if (bannedUsers.includes(username.toLowerCase())) {
                 alert('Ошибка: пользователь забанен');
                 return;
             }
             
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
 
-            const account = accounts.find(account => account.username === username && account.password === password);
+            const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase() && account.password === password);
 
             if (account) {
                 alert('Login successful');
