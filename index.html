@@ -70,7 +70,7 @@
         button:hover {
             background-color: #c0392b;
         }
-        .server-info, .login-panel, .register-panel {
+        .server-info, .login-panel, .register-panel, .profile-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -149,6 +149,13 @@
             </form>
         </div>
         
+        <div class="profile-panel" id="profile-panel" style="display:none;">
+            <h2>Профиль</h2>
+            <p id="profile-username"></p>
+            <button onclick="logout()">Выйти</button>
+            <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
+        </div>
+        
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
@@ -159,6 +166,10 @@
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
+
+    <!-- Подключение библиотеки xlsx -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    
     <script>
         const translations = {
             ru: {
@@ -177,7 +188,10 @@
                 usernameLabel: "Имя пользователя:",
                 passwordLabel: "Пароль:",
                 registerButton: "Зарегистрироваться",
-                loginButton: "Войти"
+                loginButton: "Войти",
+                profileHeader: "Профиль",
+                logoutButton: "Выйти",
+                adminButton: "Админ Панель"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -195,7 +209,10 @@
                 usernameLabel: "Ім'я користувача:",
                 passwordLabel: "Пароль:",
                 registerButton: "Зареєструватися",
-                loginButton: "Увійти"
+                loginButton: "Увійти",
+                profileHeader: "Профіль",
+                logoutButton: "Вийти",
+                adminButton: "Адмін Панель"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -213,7 +230,10 @@
                 usernameLabel: "Username:",
                 passwordLabel: "Password:",
                 registerButton: "Register",
-                loginButton: "Login"
+                loginButton: "Login",
+                profileHeader: "Profile",
+                logoutButton: "Logout",
+                adminButton: "Admin Panel"
             }
         };
 
@@ -237,14 +257,44 @@
             document.getElementById("login-password").placeholder = translations[language].passwordLabel;
             document.getElementById("register-form button").innerText = translations[language].registerButton;
             document.getElementById("login-form button").innerText = translations[language].loginButton;
+
+            // Update profile panel texts
+            document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
+            document.getElementById('logout-button').innerText = translations[language].logoutButton;
+            document.getElementById('admin-button').innerText = translations[language].adminButton;
         }
 
         function showRegister() {
             document.getElementById('register-panel').style.display = 'block';
             document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('profile-panel').style.display = 'none';
         }
 
         function showLogin() {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('profile-panel').style.display = 'none';
+        }
+
+        function showProfile(username) {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('profile-panel').style.display = 'block';
+            document.getElementById('profile-username').innerText = username;
+
+            if (username.toLowerCase() === 'credesasq') {
+                document.getElementById('admin-button').style.display = 'block';
+            } else {
+                document.getElementById('admin-button').style.display = 'none';
+            }
+        }
+
+        function goToAdminPanel() {
+            window.location.href = 'admin-panel.html';
+        }
+
+        function logout() {
+            document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
         }
@@ -267,6 +317,8 @@
 
             alert('Registration successful');
             document.getElementById('register-form').reset();
+
+            saveToExcel(accounts);
         });
 
         // Login
@@ -281,15 +333,21 @@
 
             if (account) {
                 alert('Login successful');
-                if (username.toLowerCase() === 'credesasq') {
-                    window.location.href = 'admin-panel.html';
-                }
+                showProfile(username);
             } else {
                 alert('Invalid username or password');
             }
 
             document.getElementById('login-form').reset();
         });
+
+        // Save accounts to Excel
+        function saveToExcel(accounts) {
+            const worksheet = XLSX.utils.json_to_sheet(accounts);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Accounts");
+            XLSX.writeFile(workbook, "ldo_host_accounts.xlsx");
+        }
 
         // Initialize the page with default language
         changeLanguage();
