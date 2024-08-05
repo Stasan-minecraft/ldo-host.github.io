@@ -6,7 +6,6 @@
     <title>Бесплатный хост: Создание серверов Ldo-Host</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -17,25 +16,29 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            transition: all 0.3s ease-in-out;
         }
         .container {
             width: 100%;
             max-width: 800px;
             padding: 20px;
-            background-color: #000000;
+            background-color: #1a1a1a;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             text-align: center;
+            transition: all 0.3s ease-in-out;
         }
         h1 {
             color: #e74c3c;
             font-size: 2.5em;
             margin-bottom: 20px;
+            transition: all 0.3s ease-in-out;
         }
         p#subtitle {
             font-size: 1.2em;
             margin-bottom: 40px;
             color: #bdc3c7;
+            transition: all 0.3s ease-in-out;
         }
         form {
             display: flex;
@@ -65,7 +68,7 @@
             border-radius: 5px;
             font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease-in-out;
         }
         button:hover {
             background-color: #c0392b;
@@ -208,12 +211,12 @@
         </div>
         
         <div class="admin-server-list" id="admin-server-list">
-            <h2>Серверы, созданные через админ панель</h2>
+            <h2>Все Созданы Сервера На хостенге Ldo Host</h2>
             <div class="server-list" id="admin-created-server-list"></div>
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.8.3
+            <span id="version-label">Версия сайта:</span> 2.9
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
