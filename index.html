@@ -16,6 +16,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            perspective: 1000px;
             transition: all 0.3s ease-in-out;
         }
         .container {
@@ -26,19 +27,22 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             text-align: center;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.5s;
+        }
+        .container:hover {
+            transform: rotateY(10deg);
         }
         h1 {
             color: #e74c3c;
             font-size: 2.5em;
             margin-bottom: 20px;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.5s;
         }
         p#subtitle {
             font-size: 1.2em;
             margin-bottom: 40px;
             color: #bdc3c7;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.5s;
         }
         form {
             display: flex;
@@ -59,6 +63,10 @@
             font-size: 1em;
             width: 100%;
             max-width: 400px;
+            transition: transform 0.5s;
+        }
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
+            transform: scale(1.05);
         }
         button {
             padding: 15px 30px;
@@ -68,24 +76,30 @@
             border-radius: 5px;
             font-size: 1.1em;
             cursor: pointer;
-            transition: all 0.3s ease-in-out;
+            transition: transform 0.5s;
         }
         button:hover {
             background-color: #c0392b;
+        }
+        button:focus {
+            transform: scale(1.1);
         }
         .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel, .chat-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
+            transition: transform 0.5s;
         }
         .footer {
             margin-top: 20px;
             color: #bdc3c7;
             font-size: 0.9em;
+            transition: transform 0.5s;
         }
         .language-selector {
             text-align: right;
             margin-bottom: 10px;
+            transition: transform 0.5s;
         }
         .language-selector select {
             padding: 5px;
@@ -95,7 +109,7 @@
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.5s;
         }
         .language-selector select:hover {
             background-color: #34495e;
@@ -104,12 +118,14 @@
             font-size: 1em;
             margin-top: 20px;
             color: #bdc3c7;
+            transition: transform 0.5s;
         }
         .auth-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             margin-top: 20px;
+            transition: transform 0.5s;
         }
         .forgot-password-link {
             color: #e74c3c;
@@ -121,6 +137,7 @@
         }
         .server-list {
             margin-top: 20px;
+            transition: transform 0.5s;
         }
         .server-item {
             background-color: #2c3e50;
@@ -128,11 +145,10 @@
             border-radius: 5px;
             margin-bottom: 10px;
             color: #ecf0f1;
+            transition: transform 0.5s;
         }
-        .admin-server-list {
-            margin-top: 40px;
-            border-top: 2px solid #e74c3c;
-            padding-top: 20px;
+        .server-item:hover {
+            transform: scale(1.05);
         }
         .chat-messages {
             background-color: #2c3e50;
@@ -141,9 +157,54 @@
             max-height: 300px;
             overflow-y: auto;
             margin-bottom: 20px;
+            transition: transform 0.5s;
         }
         .chat-message {
             margin-bottom: 10px;
+        }
+        .chat-message .admin {
+            color: darkred;
+        }
+        .chat-message .owner {
+            color: gold;
+        }
+        .chart-container {
+            margin-top: 40px;
+            transition: transform 0.5s;
+        }
+        .chart {
+            background-color: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.5s;
+        }
+        .chart:hover {
+            transform: scale(1.05);
+        }
+        .chat-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .chat-tabs button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+        .chat-tabs button:hover {
+            background-color: #c0392b;
+        }
+        .chat-panel {
+            display: none;
+        }
+        .chat-panel.active {
+            display: block;
         }
     </style>
 </head>
@@ -198,11 +259,20 @@
 
         <div class="profile-panel" id="profile-panel" style="display:none;">
             <h2>Профиль</h2>
+```html
             <p id="profile-username"></p>
             <button onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
             <button id="create-server-button" onclick="showCreateServer()">Создать сервер</button>
             <div class="server-list" id="server-list"></div>
+            <div class="chart-container">
+                <div class="chart">
+                    <canvas id="userChart"></canvas>
+                </div>
+                <div class="chart">
+                    <canvas id="serverChart"></canvas>
+                </div>
+            </div>
         </div>
         
         <div class="create-server-panel" id="create-server-panel" style="display:none;">
@@ -220,23 +290,42 @@
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
         </div>
-        
-        <div class="admin-server-list" id="admin-server-list">
-            <h2>Все Созданы Сервера На хостенге Ldo Host</h2>
-            <div class="server-list" id="admin-created-server-list"></div>
+
+        <div class="chat-tabs">
+            <button onclick="showChat('community-chat')">Сообщественный чат</button>
+            <button onclick="showChat('bug-chat')">Чат багов</button>
+            <button onclick="showChat('idea-chat')">Чат идей</button>
         </div>
 
-        <div class="chat-panel" id="chat-panel" style="display:none;">
+        <div class="chat-panel" id="community-chat" style="display:none;">
             <h2>Сообщественный чат</h2>
-            <div class="chat-messages" id="chat-messages"></div>
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="Введите сообщение..." required>
+            <div class="chat-messages" id="community-chat-messages"></div>
+            <form id="community-chat-form" style="display:none;">
+                <input type="text" id="community-chat-input" placeholder="Введите сообщение..." required>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+
+        <div class="chat-panel" id="bug-chat" style="display:none;">
+            <h2>Чат багов</h2>
+            <div class="chat-messages" id="bug-chat-messages"></div>
+            <form id="bug-chat-form" style="display:none;">
+                <input type="text" id="bug-chat-input" placeholder="Введите сообщение..." required>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+
+        <div class="chat-panel" id="idea-chat" style="display:none;">
+            <h2>Чат идей</h2>
+            <div class="chat-messages" id="idea-chat-messages"></div>
+            <form id="idea-chat-form" style="display:none;">
+                <input type="text" id="idea-chat-input" placeholder="Введите сообщение..." required>
                 <button type="submit">Отправить</button>
             </form>
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.10
+            <span id="version-label">Версия сайта:</span> 3.1
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -270,6 +359,8 @@
                 banButton: "Забанить пользователя",
                 changePasswordButton: "Изменить пароль",
                 chatHeader: "Сообщественный чат",
+                bugChatHeader: "Чат багов",
+                ideaChatHeader: "Чат идей",
                 chatPlaceholder: "Введите сообщение...",
                 chatSendButton: "Отправить"
             },
@@ -300,6 +391,8 @@
                 banButton: "Забанити користувача",
                 changePasswordButton: "Змінити пароль",
                 chatHeader: "Спільнотний чат",
+                bugChatHeader: "Чат багів",
+                ideaChatHeader: "Чат ідей",
                 chatPlaceholder: "Введіть повідомлення...",
                 chatSendButton: "Надіслати"
             },
@@ -330,6 +423,8 @@
                 banButton: "Ban User",
                 changePasswordButton: "Change Password",
                 chatHeader: "Community Chat",
+                bugChatHeader: "Bug Chat",
+                ideaChatHeader: "Idea Chat",
                 chatPlaceholder: "Enter your message...",
                 chatSendButton: "Send"
             }
@@ -345,11 +440,10 @@
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
             document.getElementById("version-label").innerText = translations[language].versionLabel;
             document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
-
-            // Update registration, login, forgot password, and profile panel texts
             document.querySelector('.register-panel h2').innerText = translations[language].registerHeader;
             document.querySelector('.login-panel h2').innerText = translations[language].loginHeader;
-            document.querySelector('.forgot-password-panel h2').innerText = translations[language].forgotPasswordHeader;
+            document.querySelector('.forgot-password-panel h2').innerText = translations[language```html
+                .forgotPasswordHeader;
             document.querySelector('.forgot-password-link').innerText = translations[language].forgotPasswordLink;
             document.getElementById("forgot-password-form button").innerText = translations[language].forgotPasswordButton;
             document.getElementById("register-username").placeholder = translations[language].usernameLabel;
@@ -358,15 +452,18 @@
             document.getElementById("login-password").placeholder = translations[language].passwordLabel;
             document.getElementById("register-form button").innerText = translations[language].registerButton;
             document.getElementById("login-form button").innerText = translations[language].loginButton;
-
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
-
-            // Update chat panel texts
-            document.querySelector('.chat-panel h2').innerText = translations[language].chatHeader;
-            document.getElementById("chat-input").placeholder = translations[language].chatPlaceholder;
-            document.getElementById("chat-form button").innerText = translations[language].chatSendButton;
+            document.querySelector('#community-chat h2').innerText = translations[language].chatHeader;
+            document.getElementById("community-chat-input").placeholder = translations[language].chatPlaceholder;
+            document.getElementById("community-chat-form button").innerText = translations[language].chatSendButton;
+            document.querySelector('#bug-chat h2').innerText = translations[language].bugChatHeader;
+            document.getElementById("bug-chat-input").placeholder = translations[language].chatPlaceholder;
+            document.getElementById("bug-chat-form button").innerText = translations[language].chatSendButton;
+            document.querySelector('#idea-chat h2').innerText = translations[language].ideaChatHeader;
+            document.getElementById("idea-chat-input").placeholder = translations[language].chatPlaceholder;
+            document.getElementById("idea-chat-form button").innerText = translations[language].chatSendButton;
         }
 
         function showRegister() {
@@ -399,15 +496,15 @@
                 document.getElementById('admin-button').style.display = 'none';
             }
 
-            // Display user servers
             displayUserServers(username);
 
-            // Display admin-created servers
-            displayAdminServers();
-
-            // Show chat panel
             document.getElementById('chat-panel').style.display = 'block';
-            loadChatMessages();
+            document.getElementById('community-chat-form').style.display = 'block';
+            document.getElementById('bug-chat-form').style.display = 'block';
+            document.getElementById('idea-chat-form').style.display = 'block';
+            loadChatMessages('community-chat');
+            loadChatMessages('bug-chat');
+            loadChatMessages('idea-chat');
         }
 
         function displayUserServers(username) {
@@ -420,18 +517,6 @@
                 serverItem.classList.add('server-item');
                 serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
                 serverList.appendChild(serverItem);
-            });
-        }
-
-        function displayAdminServers() {
-            let servers = JSON.parse(localStorage.getItem('servers')) || [];
-            const adminServerList = document.getElementById('admin-created-server-list');
-            adminServerList.innerHTML = '';
-            servers.forEach(server => {
-                let serverItem = document.createElement('div');
-                serverItem.classList.add('server-item');
-                serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
-                adminServerList.appendChild(serverItem);
             });
         }
 
@@ -459,9 +544,11 @@
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
             document.getElementById('chat-panel').style.display = 'none';
+            document.getElementById('community-chat-form').style.display = 'none';
+            document.getElementById('bug-chat-form').style.display = 'none';
+            document.getElementById('idea-chat-form').style.display = 'none';
         }
 
-        // Registration
         document.getElementById('register-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('register-username').value;
@@ -488,7 +575,6 @@
             document.getElementById('register-form').reset();
         });
 
-        // Login
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('login-username').value;
@@ -515,7 +601,6 @@
             document.getElementById('login-form').reset();
         });
 
-        // Forgot Password
         document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('forgot-username').value;
@@ -529,7 +614,6 @@
             document.getElementById('forgot-password-form').reset();
         });
 
-        // Create Server
         document.getElementById('create-server-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const serverName = document.getElementById('server-name').value;
@@ -544,33 +628,78 @@
             document.getElementById('create-server-form').reset();
         });
 
-        // Chat
-        document.getElementById('chat-form').addEventListener('submit', function(event) {
+        document.getElementById('community-chat-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const message = document.getElementById('chat-input').value;
+            const message = document.getElementById('community-chat-input').value;
             const username = document.getElementById('profile-username').innerText;
 
-            let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-            chatMessages.push({ username, message });
-            localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+            let chatMessages = JSON.parse(localStorage.getItem('communityChatMessages')) || [];
+            chatMessages.push({```html
+                username, message });
+            localStorage.setItem('communityChatMessages', JSON.stringify(chatMessages));
 
-            document.getElementById('chat-input').value = '';
-            loadChatMessages();
+            document.getElementById('community-chat-input').value = '';
+            loadChatMessages('community-chat');
         });
 
-        function loadChatMessages() {
-            const chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-            const chatMessagesContainer = document.getElementById('chat-messages');
+        document.getElementById('bug-chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = document.getElementById('bug-chat-input').value;
+            const username = document.getElementById('profile-username').innerText;
+
+            let chatMessages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
+            chatMessages.push({ username, message });
+            localStorage.setItem('bugChatMessages', JSON.stringify(chatMessages));
+
+            document.getElementById('bug-chat-input').value = '';
+            loadChatMessages('bug-chat');
+        });
+
+        document.getElementById('idea-chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = document.getElementById('idea-chat-input').value;
+            const username = document.getElementById('profile-username').innerText;
+
+            let chatMessages = JSON.parse(localStorage.getItem('ideaChatMessages')) || [];
+            chatMessages.push({ username, message });
+            localStorage.setItem('ideaChatMessages', JSON.stringify(chatMessages));
+
+            document.getElementById('idea-chat-input').value = '';
+            loadChatMessages('idea-chat');
+        });
+
+        function loadChatMessages(chatType) {
+            const chatMessages = JSON.parse(localStorage.getItem(`${chatType}Messages`)) || [];
+            const chatMessagesContainer = document.getElementById(`${chatType}-messages`);
             chatMessagesContainer.innerHTML = '';
             chatMessages.forEach(({ username, message }) => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
-                messageElement.innerHTML = `<strong>${username}:</strong> ${message}`;
+
+                if (username.toLowerCase() === 'credesasq') {
+                    messageElement.classList.add('owner');
+                    messageElement.innerHTML = `<strong>OWNER: ${username}:</strong> ${message}`;
+                } else {
+                    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+                    const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase());
+                    if (account && account.role === 'admin') {
+                        messageElement.classList.add('admin');
+                        messageElement.innerHTML = `<strong>ADMIN: ${username}:</strong> ${message}`;
+                    } else {
+                        messageElement.innerHTML = `<strong>${username}:</strong> ${message}`;
+                    }
+                }
                 chatMessagesContainer.appendChild(messageElement);
             });
         }
 
-        // Initialize the page with default language
+        function showChat(chatId) {
+            document.querySelectorAll('.chat-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.getElementById(chatId).classList.add('active');
+        }
+
         changeLanguage();
     </script>
 </body>
