@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бесплатный хост: Создание серверов Ldo-Host</title>
+    <title>Админ Панель</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -11,7 +11,7 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #000000, #e74c3c);
+            background: #000000;
             color: #ecf0f1;
             display: flex;
             justify-content: center;
@@ -32,32 +32,11 @@
             font-size: 2.5em;
             margin-bottom: 20px;
         }
-        p#subtitle {
+        p {
             font-size: 1.2em;
-            margin-bottom: 40px;
             color: #bdc3c7;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        label {
-            color: #e74c3c;
-            font-size: 1.1em;
-        }
-        input[type="text"], input[type="password"], select {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            font-size: 1em;
-            width: 100%;
-            max-width: 400px;
-        }
-        button {
+        .logout-button, .make-admin-button, .change-password-button {
             padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
@@ -66,335 +45,71 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
-        button:hover {
+        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover {
             background-color: #c0392b;
         }
-        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel {
-            margin-top: 20px;
-            text-align: left;
-            width: 100%;
-        }
-        .footer {
-            margin-top: 20px;
-            color: #bdc3c7;
-            font-size: 0.9em;
-        }
-        .language-selector {
-            text-align: right;
-            margin-bottom: 10px;
-        }
-        .language-selector select {
-            padding: 5px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
+        input[type="text"], input[type="password"] {
+            padding: 10px;
             border: none;
             border-radius: 5px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
             font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .language-selector select:hover {
-            background-color: #34495e;
-        }
-        p#email-instruction {
-            font-size: 1em;
-            margin-top: 20px;
-            color: #bdc3c7;
-        }
-        .auth-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .forgot-password-link {
-            color: #e74c3c;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .forgot-password-link:hover {
-            color: #c0392b;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="language-selector">
-            <select id="language-select" onchange="changeLanguage()">
-                <option value="ru">Русский</option>
-                <option value="ua">Українська</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-        <h1 id="title">Бесплатный хост: Создание серверов Ldo-Host</h1>
-        <p id="subtitle">От создателей Lock Darkman Online</p>
-
-        <div class="auth-buttons">
-            <button onclick="showRegister()">Создать аккаунт</button>
-            <button onclick="showLogin()">Войти</button>
-        </div>
-
-        <div class="register-panel" id="register-panel" style="display:none;">
-            <h2>Регистрация</h2>
-            <form id="register-form">
-                <label for="register-username">Имя пользователя:</label>
-                <input type="text" id="register-username" required>
-                <label for="register-password">Пароль:</label>
-                <input type="password" id="register-password" required>
-                <button type="submit">Зарегистрироваться</button>
-            </form>
-        </div>
-        
-        <div class="login-panel" id="login-panel" style="display:none;">
-            <h2>Вход</h2>
-            <form id="login-form">
-                <label for="login-username">Имя пользователя:</label>
-                <input type="text" id="login-username" required>
-                <label for="login-password">Пароль:</label>
-                <input type="password" id="login-password" required>
-                <button type="submit">Войти</button>
-            </form>
-            <p class="forgot-password-link" onclick="showForgotPassword()">Забыли пароль?</p>
-        </div>
-
-        <div class="forgot-password-panel" id="forgot-password-panel" style="display:none;">
-            <h2>Восстановление пароля</h2>
-            <form id="forgot-password-form">
-                <label for="forgot-username">Имя пользователя:</label>
-                <input type="text" id="forgot-username" required>
-                <button type="submit">Отправить</button>
-            </form>
-        </div>
-
-        <div class="profile-panel" id="profile-panel" style="display:none;">
-            <h2>Профиль</h2>
-            <p id="profile-username"></p>
-            <button onclick="logout()">Выйти</button>
-            <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
-        </div>
-        
-        <div class="server-info" id="server-info" style="display:none;">
-            <h2 id="server-info-title">Информация о сервере</h2>
-            <p id="server-ip-display"></p>
-        </div>
-        
-        <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.6
-        </div>
-        <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
+        <h1>Админ Панель</h1>
+        <p>Добро пожаловать, администратор!</p>
+        <input type="text" id="admin-username" placeholder="Введите имя пользователя">
+        <button class="make-admin-button" onclick="makeAdmin()">Сделать администратором</button>
+        <input type="text" id="change-password-username" placeholder="Введите имя пользователя для изменения пароля">
+        <input type="password" id="new-password" placeholder="Введите новый пароль">
+        <button class="change-password-button" onclick="changePassword()">Изменить пароль</button>
+        <button class="logout-button" onclick="logout()">Выйти</button>
     </div>
-    
     <script>
-        const translations = {
-            ru: {
-                title: "Бесплатный хост: Создание серверов Ldo-Host",
-                subtitle: "От создателей Lock Darkman Online",
-                serverNameLabel: "Название сервера:",
-                serverIpLabel: "Введите IP-адрес сервера:",
-                createServerButton: "Создать сервер",
-                serverInfoTitle: "Информация о сервере",
-                versionLabel: "Версия сайта:",
-                emailInstruction: "Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com",
-                registerHeader: "Регистрация",
-                loginHeader: "Вход",
-                forgotPasswordHeader: "Восстановление пароля",
-                forgotPasswordLink: "Забыли пароль?",
-                forgotPasswordButton: "Отправить",
-                adminHeader: "Админ Панель",
-                welcomeAdmin: "Добро пожаловать, администратор!",
-                usernameLabel: "Имя пользователя:",
-                passwordLabel: "Пароль:",
-                registerButton: "Зарегистрироваться",
-                loginButton: "Войти",
-                profileHeader: "Профиль",
-                logoutButton: "Выйти",
-                adminButton: "Админ Панель",
-                makeAdminButton: "Сделать администратором"
-            },
-            ua: {
-                title: "Безкоштовний хост: Створення серверів Ldo-Host",
-                subtitle: "Від творців Lock Darkman Online",
-                serverNameLabel: "Назва сервера:",
-                serverIpLabel: "Введіть IP-адресу сервера:",
-                createServerButton: "Створити сервер",
-                serverInfoTitle: "Інформація про сервер",
-                versionLabel: "Версія сайту:",
-                emailInstruction: "Для створення сервера надішліть назву сервера та IP-адресу на пошту: stasikgnidan@gmail.com",
-                registerHeader: "Реєстрація",
-                loginHeader: "Вхід",
-                forgotPasswordHeader: "Відновлення пароля",
-                forgotPasswordLink: "Забули пароль?",
-                forgotPasswordButton: "Надіслати",
-                adminHeader: "Адмін Панель",
-                welcomeAdmin: "Ласкаво просимо, адміністратор!",
-                usernameLabel: "Ім'я користувача:",
-                passwordLabel: "Пароль:",
-                registerButton: "Зареєструватися",
-                loginButton: "Увійти",
-                profileHeader: "Профіль",
-                logoutButton: "Вийти",
-                adminButton: "Адмін Панель",
-                makeAdminButton: "Зробити адміністратором"
-            },
-            en: {
-                title: "Free Host: Creating Ldo-Host Servers",
-                subtitle: "From the creators of Lock Darkman Online",
-                serverNameLabel: "Server Name:",
-                serverIpLabel: "Enter Server IP Address:",
-                createServerButton: "Create Server",
-                serverInfoTitle: "Server Information",
-                versionLabel: "Site Version:",
-                emailInstruction: "To create a server, send the server name and IP address to: stasikgnidan@gmail.com",
-                registerHeader: "Register",
-                loginHeader: "Login",
-                forgotPasswordHeader: "Password Recovery",
-                forgotPasswordLink: "Forgot your password?",
-                forgotPasswordButton: "Send",
-                adminHeader: "Admin Panel",
-                welcomeAdmin: "Welcome, Administrator!",
-                usernameLabel: "Username:",
-                passwordLabel: "Password:",
-                registerButton: "Register",
-                loginButton: "Login",
-                profileHeader: "Profile",
-                logoutButton: "Logout",
-                adminButton: "Admin Panel",
-                makeAdminButton: "Make Admin"
-            }
-        };
+        function makeAdmin() {
+            const username = document.getElementById('admin-username').value;
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(account => account.username === username);
 
-        function changeLanguage() {
-            const language = document.getElementById("language-select").value;
-            document.getElementById("title").innerText = translations[language].title;
-            document.getElementById("subtitle").innerText = translations[language].subtitle;
-            document.getElementById("server-name-label").innerText = translations[language].serverNameLabel;
-            document.getElementById("server-ip-label").innerText = translations[language].serverIpLabel;
-            document.getElementById("create-server-button").innerText = translations[language].createServerButton;
-            document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
-            document.getElementById("version-label").innerText = translations[language].versionLabel;
-            document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
-
-            // Update registration, login, forgot password, and profile panel texts
-            document.querySelector('.register-panel h2').innerText = translations[language].registerHeader;
-            document.querySelector('.login-panel h2').innerText = translations[language].loginHeader;
-            document.querySelector('.forgot-password-panel h2').innerText = translations[language].forgotPasswordHeader;
-            document.querySelector('.forgot-password-link').innerText = translations[language].forgotPasswordLink;
-            document.getElementById("forgot-password-form button").innerText = translations[language].forgotPasswordButton;
-            document.getElementById("register-username").placeholder = translations[language].usernameLabel;
-            document.getElementById("register-password").placeholder = translations[language].passwordLabel;
-            document.getElementById("login-username").placeholder = translations[language].usernameLabel;
-            document.getElementById("login-password").placeholder = translations[language].passwordLabel;
-            document.getElementById("register-form button").innerText = translations[language].registerButton;
-            document.getElementById("login-form button").innerText = translations[language].loginButton;
-
-            document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
-            document.getElementById('logout-button').innerText = translations[language].logoutButton;
-            document.getElementById('admin-button').innerText = translations[language].adminButton;
-            document.getElementById('make-admin-button').innerText = translations[language].makeAdminButton;
-        }
-
-        function showRegister() {
-            document.getElementById('register-panel').style.display = 'block';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
-        }
-
-        function showLogin() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'block';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
-        }
-
-        function showProfile(username) {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'block';
-            document.getElementById('forgot-password-panel').style.display = 'none';
-            document.getElementById('profile-username').innerText = username;
-
-            if (username.toLowerCase() === 'credesasq') {
-                document.getElementById('admin-button').style.display = 'block';
+            if (account) {
+                account.role = 'admin';
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                alert(`Пользователь ${username} теперь администратор`);
+                document.getElementById('admin-username').value = '';
             } else {
-                document.getElementById('admin-button').style.display = 'none';
+                alert('Пользователь не найден');
             }
         }
 
-        function showForgotPassword() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'block';
-        }
+        function changePassword() {
+            const username = document.getElementById('change-password-username').value;
+            const newPassword = document.getElementById('new-password').value;
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(account => account.username === username);
 
-        function goToAdminPanel() {
-            window.location.href = 'admin-panel.html';
+            if (account) {
+                account.password = newPassword;
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                alert(`Пароль для пользователя ${username} успешно изменен`);
+                document.getElementById('change-password-username').value = '';
+                document.getElementById('new-password').value = '';
+            } else {
+                alert('Пользователь не найден');
+            }
         }
 
         function logout() {
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'block';
+            window.location.href = 'index.html';
         }
-
-        // Registration
-        document.getElementById('register-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
-            
-            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-            
-            if (accounts.find(account => account.username === username)) {
-                alert('Username already exists');
-                return;
-            }
-
-            accounts.push({ username, password, role: 'user' });
-            localStorage.setItem('accounts', JSON.stringify(accounts));
-
-            alert('Registration successful');
-            document.getElementById('register-form').reset();
-        });
-
-        // Login
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            
-            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-
-            const account = accounts.find(account => account.username === username && account.password === password);
-
-            if (account) {
-                alert('Login successful');
-                showProfile(username);
-            } else {
-                alert('Invalid username or password');
-            }
-
-            document.getElementById('login-form').reset();
-        });
-
-        // Forgot Password
-        document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('forgot-username').value;
-
-            const email = 'stasikgnidan@gmail.com';
-            const subject = 'Восстановление пароля';
-            const body = `Пользователь с именем ${username} запросил восстановление пароля.`;
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-            alert('Запрос на восстановление пароля отправлен');
-            document.getElementById('forgot-password-form').reset();
-        });
-
-        // Initialize the page with default language
-        changeLanguage();
     </script>
 </body>
 </html>
