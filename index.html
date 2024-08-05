@@ -116,6 +116,16 @@
         .forgot-password-link:hover {
             color: #c0392b;
         }
+        .server-list {
+            margin-top: 20px;
+        }
+        .server-item {
+            background-color: #2c3e50;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +183,7 @@
             <button onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
             <button id="create-server-button" onclick="createServer()">Создать сервер</button>
+            <div class="server-list" id="server-list"></div>
         </div>
         
         <div class="server-info" id="server-info" style="display:none;">
@@ -181,7 +192,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.7.4
+            <span id="version-label">Версия сайта:</span> 2.8
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -329,6 +340,22 @@
             } else {
                 document.getElementById('admin-button').style.display = 'none';
             }
+
+            // Display user servers
+            displayUserServers(username);
+        }
+
+        function displayUserServers(username) {
+            let servers = JSON.parse(localStorage.getItem('servers')) || [];
+            let userServers = servers.filter(server => server.owner.toLowerCase() === username.toLowerCase());
+            const serverList = document.getElementById('server-list');
+            serverList.innerHTML = '';
+            userServers.forEach(server => {
+                let serverItem = document.createElement('div');
+                serverItem.classList.add('server-item');
+                serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
+                serverList.appendChild(serverItem);
+            });
         }
 
         function showForgotPassword() {
