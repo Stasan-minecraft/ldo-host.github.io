@@ -36,7 +36,7 @@
             font-size: 1.2em;
             color: #bdc3c7;
         }
-        .logout-button {
+        .logout-button, .make-admin-button {
             padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
@@ -45,9 +45,21 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
-        .logout-button:hover {
+        .logout-button:hover, .make-admin-button:hover {
             background-color: #c0392b;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-size: 1em;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -55,9 +67,26 @@
     <div class="container">
         <h1>Админ Панель</h1>
         <p>Добро пожаловать, администратор!</p>
+        <input type="text" id="admin-username" placeholder="Введите имя пользователя">
+        <button class="make-admin-button" onclick="makeAdmin()">Сделать администратором</button>
         <button class="logout-button" onclick="logout()">Выйти</button>
     </div>
     <script>
+        function makeAdmin() {
+            const username = document.getElementById('admin-username').value;
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(account => account.username === username);
+
+            if (account) {
+                account.role = 'admin';
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                alert(`Пользователь ${username} теперь администратор`);
+                document.getElementById('admin-username').value = '';
+            } else {
+                alert('Пользователь не найден');
+            }
+        }
+
         function logout() {
             window.location.href = 'index.html';
         }
