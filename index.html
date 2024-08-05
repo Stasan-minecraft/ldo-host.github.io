@@ -70,7 +70,7 @@
         button:hover {
             background-color: #c0392b;
         }
-        .server-info, .admin-panel, .login-panel, .register-panel {
+        .server-info, .login-panel, .register-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -102,6 +102,12 @@
             margin-top: 20px;
             color: #bdc3c7;
         }
+        .auth-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -115,8 +121,13 @@
         </div>
         <h1 id="title">Бесплатный хост: Создание серверов Ldo-Host</h1>
         <p id="subtitle">От создателей Lock Darkman Online</p>
-        
-        <div class="register-panel">
+
+        <div class="auth-buttons">
+            <button onclick="showRegister()">Создать аккаунт</button>
+            <button onclick="showLogin()">Войти</button>
+        </div>
+
+        <div class="register-panel" id="register-panel" style="display:none;">
             <h2>Регистрация</h2>
             <form id="register-form">
                 <label for="register-username">Имя пользователя:</label>
@@ -127,7 +138,7 @@
             </form>
         </div>
         
-        <div class="login-panel">
+        <div class="login-panel" id="login-panel" style="display:none;">
             <h2>Вход</h2>
             <form id="login-form">
                 <label for="login-username">Имя пользователя:</label>
@@ -138,18 +149,13 @@
             </form>
         </div>
         
-        <div class="admin-panel" id="admin-panel" style="display:none;">
-            <h2>Админ Панель</h2>
-            <p>Добро пожаловать, администратор!</p>
-        </div>
-        
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.1
+            <span id="version-label">Версия сайта:</span> 2.2
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -231,10 +237,16 @@
             document.getElementById("login-password").placeholder = translations[language].passwordLabel;
             document.getElementById("register-form button").innerText = translations[language].registerButton;
             document.getElementById("login-form button").innerText = translations[language].loginButton;
+        }
 
-            // Update admin panel texts
-            document.querySelector('.admin-panel h2').innerText = translations[language].adminHeader;
-            document.querySelector('.admin-panel p').innerText = translations[language].welcomeAdmin;
+        function showRegister() {
+            document.getElementById('register-panel').style.display = 'block';
+            document.getElementById('login-panel').style.display = 'none';
+        }
+
+        function showLogin() {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'block';
         }
 
         // Registration
@@ -270,7 +282,7 @@
             if (account) {
                 alert('Login successful');
                 if (username.toLowerCase() === 'credesasq') {
-                    document.getElementById('admin-panel').style.display = 'block';
+                    window.location.href = 'admin-panel.html';
                 }
             } else {
                 alert('Invalid username or password');
