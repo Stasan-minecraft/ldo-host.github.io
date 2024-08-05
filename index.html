@@ -180,13 +180,10 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.3
+            <span id="version-label">Версия сайта:</span> 2.4
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
-
-    <!-- Подключение библиотеки xlsx -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     
     <script>
         const translations = {
@@ -356,8 +353,6 @@
 
             alert('Registration successful');
             document.getElementById('register-form').reset();
-
-            saveToExcel(accounts);
         });
 
         // Login
@@ -393,14 +388,6 @@
             alert('Запрос на восстановление пароля отправлен');
             document.getElementById('forgot-password-form').reset();
         });
-
-        // Save accounts to Excel
-        function saveToExcel(accounts) {
-            const worksheet = XLSX.utils.json_to_sheet(accounts);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Accounts");
-            XLSX.writeFile(workbook, "ldo_host_accounts.xlsx");
-        }
 
         // Initialize the page with default language
         changeLanguage();
