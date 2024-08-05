@@ -180,7 +180,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.6
+            <span id="version-label">Версия сайта:</span> 2.7
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -210,7 +210,9 @@
                 profileHeader: "Профиль",
                 logoutButton: "Выйти",
                 adminButton: "Админ Панель",
-                makeAdminButton: "Сделать администратором"
+                makeAdminButton: "Сделать администратором",
+                banButton: "Забанить пользователя",
+                changePasswordButton: "Изменить пароль"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -235,7 +237,9 @@
                 profileHeader: "Профіль",
                 logoutButton: "Вийти",
                 adminButton: "Адмін Панель",
-                makeAdminButton: "Зробити адміністратором"
+                makeAdminButton: "Зробити адміністратором",
+                banButton: "Забанити користувача",
+                changePasswordButton: "Змінити пароль"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -260,7 +264,9 @@
                 profileHeader: "Profile",
                 logoutButton: "Logout",
                 adminButton: "Admin Panel",
-                makeAdminButton: "Make Admin"
+                makeAdminButton: "Make Admin",
+                banButton: "Ban User",
+                changePasswordButton: "Change Password"
             }
         };
 
@@ -291,7 +297,6 @@
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
-            document.getElementById('make-admin-button').innerText = translations[language].makeAdminButton;
         }
 
         function showRegister() {
@@ -315,7 +320,10 @@
             document.getElementById('forgot-password-panel').style.display = 'none';
             document.getElementById('profile-username').innerText = username;
 
-            if (username.toLowerCase() === 'credesasq') {
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            const account = accounts.find(account => account.username === username);
+
+            if (account && account.role === 'admin') {
                 document.getElementById('admin-button').style.display = 'block';
             } else {
                 document.getElementById('admin-button').style.display = 'none';
@@ -352,6 +360,13 @@
                 return;
             }
 
+            let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+
+            if (bannedUsers.includes(username)) {
+                alert('Ошибка: пользователь забанен');
+                return;
+            }
+
             accounts.push({ username, password, role: 'user' });
             localStorage.setItem('accounts', JSON.stringify(accounts));
 
@@ -364,6 +379,13 @@
             event.preventDefault();
             const username = document.getElementById('login-username').value;
             const password = document.getElementById('login-password').value;
+
+            let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+
+            if (bannedUsers.includes(username)) {
+                alert('Ошибка: пользователь забанен');
+                return;
+            }
             
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
 
