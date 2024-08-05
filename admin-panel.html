@@ -78,9 +78,9 @@
     </div>
     <script>
         function makeAdmin() {
-            const username = document.getElementById('admin-username').value;
+            const username = document.getElementById('admin-username').value.toLowerCase();
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-            const account = accounts.find(account => account.username === username);
+            const account = accounts.find(account => account.username.toLowerCase() === username);
 
             if (account) {
                 account.role = 'admin';
@@ -93,10 +93,10 @@
         }
 
         function changePassword() {
-            const username = document.getElementById('change-password-username').value;
+            const username = document.getElementById('change-password-username').value.toLowerCase();
             const newPassword = document.getElementById('new-password').value;
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-            const account = accounts.find(account => account.username === username);
+            const account = accounts.find(account => account.username.toLowerCase() === username);
 
             if (account) {
                 account.password = newPassword;
@@ -110,11 +110,11 @@
         }
 
         function banUser() {
-            const username = document.getElementById('ban-username').value;
+            const username = document.getElementById('ban-username').value.toLowerCase();
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
             let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
 
-            const accountIndex = accounts.findIndex(account => account.username === username);
+            const accountIndex = accounts.findIndex(account => account.username.toLowerCase() === username);
             if (accountIndex !== -1) {
                 accounts.splice(accountIndex, 1);
                 localStorage.setItem('accounts', JSON.stringify(accounts));
