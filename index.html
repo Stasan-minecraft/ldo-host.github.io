@@ -172,6 +172,7 @@
             <p id="profile-username"></p>
             <button onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
+            <button id="create-server-button" onclick="createServer()">Создать сервер</button>
         </div>
         
         <div class="server-info" id="server-info" style="display:none;">
@@ -180,7 +181,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.7.2
+            <span id="version-label">Версия сайта:</span> 2.7.4
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -323,7 +324,7 @@
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
             const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase());
 
-            if (account && account.role === 'admin') {
+            if (account && (account.username.toLowerCase() === 'credesasq' || account.username.toUpperCase() === 'CREDESASQ')) {
                 document.getElementById('admin-button').style.display = 'block';
             } else {
                 document.getElementById('admin-button').style.display = 'none';
@@ -345,6 +346,13 @@
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
+        }
+
+        function createServer() {
+            const email = 'stasikgnidan@gmail.com';
+            const subject = 'Создание сервера';
+            const body = 'Пожалуйста, отправьте название сервера и IP-адрес на этот email.';
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         // Registration
@@ -370,7 +378,7 @@
             accounts.push({ username, password, role: 'user' });
             localStorage.setItem('accounts', JSON.stringify(accounts));
 
-            alert('Registration successful');
+            alert('Регистрация успешна');
             document.getElementById('register-form').reset();
         });
 
@@ -392,10 +400,10 @@
             const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase() && account.password === password);
 
             if (account) {
-                alert('Login successful');
+                alert('Вход выполнен успешно');
                 showProfile(username);
             } else {
-                alert('Invalid username or password');
+                alert('Неверное имя пользователя или пароль');
             }
 
             document.getElementById('login-form').reset();
