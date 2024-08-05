@@ -70,7 +70,7 @@
         button:hover {
             background-color: #c0392b;
         }
-        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel {
+        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -182,17 +182,28 @@
             <p id="profile-username"></p>
             <button onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
-            <button id="create-server-button" onclick="createServer()">Создать сервер</button>
+            <button id="create-server-button" onclick="showCreateServer()">Создать сервер</button>
             <div class="server-list" id="server-list"></div>
         </div>
         
+        <div class="create-server-panel" id="create-server-panel" style="display:none;">
+            <h2>Создать сервер</h2>
+            <form id="create-server-form">
+                <label for="server-name">Название сервера:</label>
+                <input type="text" id="server-name" required>
+                <label for="server-ip">IP-адрес сервера:</label>
+                <input type="text" id="server-ip" required>
+                <button type="submit">Создать</button>
+            </form>
+        </div>
+
         <div class="server-info" id="server-info" style="display:none;">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.8.1
+            <span id="version-label">Версия сайта:</span> 2.8.2
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -365,6 +376,14 @@
             document.getElementById('forgot-password-panel').style.display = 'block';
         }
 
+        function showCreateServer() {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('profile-panel').style.display = 'none';
+            document.getElementById('forgot-password-panel').style.display = 'none';
+            document.getElementById('create-server-panel').style.display = 'block';
+        }
+
         function goToAdminPanel() {
             window.location.href = 'admin-panel.html';
         }
@@ -373,13 +392,6 @@
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
-        }
-
-        function createServer() {
-            const email = 'stasikgnidan@gmail.com';
-            const subject = 'Создание сервера';
-            const body = 'Пожалуйста, отправьте название сервера и IP-адрес на этот email.';
-            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         // Registration
@@ -448,6 +460,21 @@
 
             alert('Запрос на восстановление пароля отправлен');
             document.getElementById('forgot-password-form').reset();
+        });
+
+        // Create Server
+        document.getElementById('create-server-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const serverName = document.getElementById('server-name').value;
+            const serverIp = document.getElementById('server-ip').value;
+
+            const email = 'stasikgnidan@gmail.com';
+            const subject = 'Создание сервера';
+            const body = `Название сервера: ${serverName}\nIP-адрес сервера: ${serverIp}`;
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            alert('Запрос на создание сервера отправлен');
+            document.getElementById('create-server-form').reset();
         });
 
         // Initialize the page with default language
