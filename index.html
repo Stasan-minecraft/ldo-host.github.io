@@ -73,7 +73,7 @@
         button:hover {
             background-color: #c0392b;
         }
-        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel {
+        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel, .chat-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -133,6 +133,17 @@
             margin-top: 40px;
             border-top: 2px solid #e74c3c;
             padding-top: 20px;
+        }
+        .chat-messages {
+            background-color: #2c3e50;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -214,9 +225,18 @@
             <h2>Все Созданы Сервера На хостенге Ldo Host</h2>
             <div class="server-list" id="admin-created-server-list"></div>
         </div>
+
+        <div class="chat-panel" id="chat-panel" style="display:none;">
+            <h2>Сообщественный чат</h2>
+            <div class="chat-messages" id="chat-messages"></div>
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Введите сообщение..." required>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.9.1
+            <span id="version-label">Версия сайта:</span> 2.10
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -248,7 +268,10 @@
                 adminButton: "Админ Панель",
                 makeAdminButton: "Сделать администратором",
                 banButton: "Забанить пользователя",
-                changePasswordButton: "Изменить пароль"
+                changePasswordButton: "Изменить пароль",
+                chatHeader: "Сообщественный чат",
+                chatPlaceholder: "Введите сообщение...",
+                chatSendButton: "Отправить"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -275,7 +298,10 @@
                 adminButton: "Адмін Панель",
                 makeAdminButton: "Зробити адміністратором",
                 banButton: "Забанити користувача",
-                changePasswordButton: "Змінити пароль"
+                changePasswordButton: "Змінити пароль",
+                chatHeader: "Спільнотний чат",
+                chatPlaceholder: "Введіть повідомлення...",
+                chatSendButton: "Надіслати"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -302,7 +328,10 @@
                 adminButton: "Admin Panel",
                 makeAdminButton: "Make Admin",
                 banButton: "Ban User",
-                changePasswordButton: "Change Password"
+                changePasswordButton: "Change Password",
+                chatHeader: "Community Chat",
+                chatPlaceholder: "Enter your message...",
+                chatSendButton: "Send"
             }
         };
 
@@ -333,6 +362,11 @@
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
+
+            // Update chat panel texts
+            document.querySelector('.chat-panel h2').innerText = translations[language].chatHeader;
+            document.getElementById("chat-input").placeholder = translations[language].chatPlaceholder;
+            document.getElementById("chat-form button").innerText = translations[language].chatSendButton;
         }
 
         function showRegister() {
@@ -370,6 +404,10 @@
 
             // Display admin-created servers
             displayAdminServers();
+
+            // Show chat panel
+            document.getElementById('chat-panel').style.display = 'block';
+            loadChatMessages();
         }
 
         function displayUserServers(username) {
@@ -420,6 +458,7 @@
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('chat-panel').style.display = 'none';
         }
 
         // Registration
@@ -504,6 +543,32 @@
             alert('Запрос на создание сервера отправлен');
             document.getElementById('create-server-form').reset();
         });
+
+        // Chat
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const message = document.getElementById('chat-input').value;
+            const username = document.getElementById('profile-username').innerText;
+
+            let chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            chatMessages.push({ username, message });
+            localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+
+            document.getElementById('chat-input').value = '';
+            loadChatMessages();
+        });
+
+        function loadChatMessages() {
+            const chatMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            const chatMessagesContainer = document.getElementById('chat-messages');
+            chatMessagesContainer.innerHTML = '';
+            chatMessages.forEach(({ username, message }) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message');
+                messageElement.innerHTML = `<strong>${username}:</strong> ${message}`;
+                chatMessagesContainer.appendChild(messageElement);
+            });
+        }
 
         // Initialize the page with default language
         changeLanguage();
