@@ -36,7 +36,7 @@
             font-size: 1.2em;
             color: #bdc3c7;
         }
-        .logout-button, .make-admin-button, .change-password-button, .ban-button {
+        .logout-button, .make-admin-button, .change-password-button, .ban-button, .add-server-button, .remove-server-button {
             padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
@@ -47,7 +47,7 @@
             transition: background-color 0.3s;
             margin-top: 20px;
         }
-        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover, .ban-button:hover {
+        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover, .ban-button:hover, .add-server-button:hover, .remove-server-button:hover {
             background-color: #c0392b;
         }
         input[type="text"], input[type="password"] {
@@ -60,6 +60,16 @@
             width: 100%;
             max-width: 400px;
             margin-bottom: 20px;
+        }
+        .server-list {
+            margin-top: 20px;
+        }
+        .server-item {
+            background-color: #2c3e50;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #ecf0f1;
         }
     </style>
 </head>
@@ -74,6 +84,11 @@
         <button class="change-password-button" onclick="changePassword()">Изменить пароль</button>
         <input type="text" id="ban-username" placeholder="Введите имя пользователя для бана">
         <button class="ban-button" onclick="banUser()">Забанить пользователя</button>
+        <input type="text" id="server-name" placeholder="Введите название сервера">
+        <input type="text" id="server-ip" placeholder="Введите IP сервера">
+        <button class="add-server-button" onclick="addServer()">Добавить сервер</button>
+        <button class="remove-server-button" onclick="removeServer()">Удалить сервер</button>
+        <div class="server-list" id="server-list"></div>
         <button class="logout-button" onclick="logout()">Выйти</button>
     </div>
     <script>
@@ -130,9 +145,58 @@
             }
         }
 
+        function addServer() {
+            const name = document.getElementById('server-name').value;
+            const ip = document.getElementById('server-ip').value;
+
+            if (!name || !ip) {
+                alert('Пожалуйста, введите название и IP сервера');
+                return;
+            }
+
+            let servers = JSON.parse(localStorage.getItem('servers')) || [];
+            servers.push({ name, ip });
+            localStorage.setItem('servers', JSON.stringify(servers));
+            alert('Сервер добавлен');
+            document.getElementById('server-name').value = '';
+            document.getElementById('server-ip').value = '';
+            displayServers();
+        }
+
+        function removeServer() {
+            const name = document.getElementById('server-name').value;
+
+            if (!name) {
+                alert('Пожалуйста, введите название сервера');
+                return;
+            }
+
+            let servers = JSON.parse(localStorage.getItem('servers')) || [];
+            servers = servers.filter(server => server.name !== name);
+            localStorage.setItem('servers', JSON.stringify(servers));
+            alert('Сервер удален');
+            document.getElementById('server-name').value = '';
+            displayServers();
+        }
+
+        function displayServers() {
+            let servers = JSON.parse(localStorage.getItem('servers')) || [];
+            const serverList = document.getElementById('server-list');
+            serverList.innerHTML = '';
+            servers.forEach(server => {
+                let serverItem = document.createElement('div');
+                serverItem.classList.add('server-item');
+                serverItem.innerText = `Название: ${server.name}, IP: ${server.ip}`;
+                serverList.appendChild(serverItem);
+            });
+        }
+
         function logout() {
             window.location.href = 'index.html';
         }
+
+        // Display servers on load
+        displayServers();
     </script>
 </body>
 </html>
