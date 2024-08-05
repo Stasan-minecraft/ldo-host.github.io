@@ -36,7 +36,7 @@
             font-size: 1.2em;
             color: #bdc3c7;
         }
-        .logout-button, .make-admin-button, .change-password-button {
+        .logout-button, .make-admin-button, .change-password-button, .ban-button {
             padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
@@ -47,7 +47,7 @@
             transition: background-color 0.3s;
             margin-top: 20px;
         }
-        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover {
+        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover, .ban-button:hover {
             background-color: #c0392b;
         }
         input[type="text"], input[type="password"] {
@@ -72,6 +72,8 @@
         <input type="text" id="change-password-username" placeholder="Введите имя пользователя для изменения пароля">
         <input type="password" id="new-password" placeholder="Введите новый пароль">
         <button class="change-password-button" onclick="changePassword()">Изменить пароль</button>
+        <input type="text" id="ban-username" placeholder="Введите имя пользователя для бана">
+        <button class="ban-button" onclick="banUser()">Забанить пользователя</button>
         <button class="logout-button" onclick="logout()">Выйти</button>
     </div>
     <script>
@@ -104,6 +106,27 @@
                 document.getElementById('new-password').value = '';
             } else {
                 alert('Пользователь не найден');
+            }
+        }
+
+        function banUser() {
+            const username = document.getElementById('ban-username').value;
+            let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            let bannedUsers = JSON.parse(localStorage.getItem('bannedUsers')) || [];
+
+            const accountIndex = accounts.findIndex(account => account.username === username);
+            if (accountIndex !== -1) {
+                accounts.splice(accountIndex, 1);
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+            }
+
+            if (!bannedUsers.includes(username)) {
+                bannedUsers.push(username);
+                localStorage.setItem('bannedUsers', JSON.stringify(bannedUsers));
+                alert(`Пользователь ${username} забанен`);
+                document.getElementById('ban-username').value = '';
+            } else {
+                alert('Пользователь уже забанен');
             }
         }
 
