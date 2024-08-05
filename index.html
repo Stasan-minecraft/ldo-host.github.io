@@ -180,7 +180,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 2.4
+            <span id="version-label">Версия сайта:</span> 2.5
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -209,7 +209,8 @@
                 loginButton: "Войти",
                 profileHeader: "Профиль",
                 logoutButton: "Выйти",
-                adminButton: "Админ Панель"
+                adminButton: "Админ Панель",
+                makeAdminButton: "Сделать администратором"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -233,7 +234,8 @@
                 loginButton: "Увійти",
                 profileHeader: "Профіль",
                 logoutButton: "Вийти",
-                adminButton: "Адмін Панель"
+                adminButton: "Адмін Панель",
+                makeAdminButton: "Зробити адміністратором"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -257,7 +259,8 @@
                 loginButton: "Login",
                 profileHeader: "Profile",
                 logoutButton: "Logout",
-                adminButton: "Admin Panel"
+                adminButton: "Admin Panel",
+                makeAdminButton: "Make Admin"
             }
         };
 
@@ -288,6 +291,7 @@
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
+            document.getElementById('make-admin-button').innerText = translations[language].makeAdminButton;
         }
 
         function showRegister() {
@@ -348,7 +352,7 @@
                 return;
             }
 
-            accounts.push({ username, password });
+            accounts.push({ username, password, role: 'user' });
             localStorage.setItem('accounts', JSON.stringify(accounts));
 
             alert('Registration successful');
