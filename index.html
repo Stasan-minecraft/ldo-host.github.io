@@ -172,6 +172,8 @@
         }
         .chat-message {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
         }
         .chat-message .admin {
             color: darkred;
@@ -181,6 +183,13 @@
         }
         .chat-message .user {
             color: lightblue;
+        }
+        .chat-message .likes {
+            color: #ecf0f1;
+            cursor: pointer;
+        }
+        .chat-message .likes:hover {
+            color: #e74c3c;
         }
         .chart-container {
             margin-top: 40px;
@@ -230,6 +239,13 @@
         }
         .close-button:hover {
             background-color: #e74c3c;
+        }
+        .reply-button {
+            color: #ecf0f1;
+            cursor: pointer;
+        }
+        .reply-button:hover {
+            color: #e74c3c;
         }
     </style>
 </head>
@@ -347,7 +363,7 @@
         </div>
 
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.6
+            <span id="version-label">Версия сайта:</span> 3.2.7
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -384,7 +400,8 @@
                 bugChatHeader: "Чат багов",
                 ideaChatHeader: "Чат идей",
                 chatPlaceholder: "Введите сообщение...",
-                chatSendButton: "Отправить"
+                chatSendButton: "Отправить",
+                likeButton: "Лайк"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -416,7 +433,8 @@
                 bugChatHeader: "Чат багів",
                 ideaChatHeader: "Чат ідей",
                 chatPlaceholder: "Введіть повідомлення...",
-                chatSendButton: "Надіслати"
+                chatSendButton: "Надіслати",
+                likeButton: "Лайк"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -448,7 +466,8 @@
                 bugChatHeader: "Bug Chat",
                 ideaChatHeader: "Idea Chat",
                 chatPlaceholder: "Enter your message...",
-                chatSendButton: "Send"
+                chatSendButton: "Send",
+                likeButton: "Like"
             }
         };
 
@@ -557,7 +576,7 @@
                 return;
             }
 
-            messages.push({ username, message, role: 'user' });
+            messages.push({ username, message, role: 'user', likes: 0 });
             localStorage.setItem('chatMessages', JSON.stringify(messages));
             document.getElementById('chat-message').value = '';
             displayChatMessages();
@@ -579,10 +598,10 @@
             const chatMessages = document.getElementById('chat-messages');
             chatMessages.innerHTML = '';
 
-            messages.forEach(({ username, message, role }) => {
+            messages.forEach(({ username, message, role, likes }, index) => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
-                messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
+                messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message} <span class="likes" onclick="likeMessage(${index})">👍 ${likes}</span>`;
                 chatMessages.appendChild(messageElement);
             });
         }
@@ -592,12 +611,36 @@
             const bugChatMessages = document.getElementById('bug-chat-messages');
             bugChatMessages.innerHTML = '';
 
-            messages.forEach(({ username, message, role }) => {
+            messages.forEach(({ username, message, role }, index) => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
-                messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
+                if (role === 'admin') {
+                    messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
+                } else {
+                    messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message} <span class="reply-button" onclick="replyToMessage(${index})">Ответить</span>`;
+                }
                 bugChatMessages.appendChild(messageElement);
             });
+        }
+
+        function likeMessage(index) {
+            let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            messages[index].likes += 1;
+            localStorage.setItem('chatMessages', JSON.stringify(messages));
+            displayChatMessages();
+        }
+
+        function replyToMessage(index) {
+            const username = document.getElementById('profile-username').innerText;
+            let messages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
+            const originalMessage = messages[index].message;
+
+            const reply = prompt("Введите ваш ответ:");
+            if (reply) {
+                messages.push({ username, message: `Ответ на "${originalMessage}": ${reply}`, role: 'admin' });
+                localStorage.setItem('bugChatMessages', JSON.stringify(messages));
+                displayBugChatMessages();
+            }
         }
 
         function closeWindow() {
