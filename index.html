@@ -240,15 +240,14 @@
             <form id="forgot-password-form">
                 <label for="forgot-username">Имя пользователя:</label>
                 <input type="text" id="forgot-username" required>
-                <button type="```html
-                    Отправить</button>
+                <button type="submit">Отправить</button>
             </form>
         </div>
 
         <div class="profile-panel" id="profile-panel" style="display:none;">
             <h2>Профиль</h2>
             <p id="profile-username"></p>
-            <button onclick="logout()">Выйти</button>
+            <button id="logout-button" onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
             <button id="create-server-button" onclick="showCreateServer()">Создать сервер</button>
             <div class="server-list" id="server-list"></div>
@@ -279,7 +278,7 @@
         </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.1
+            <span id="version-label">Версия сайта:</span> 3.2.2
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -388,9 +387,9 @@
             const language = document.getElementById("language-select").value;
             document.getElementById("title").innerText = translations[language].title;
             document.getElementById("subtitle").innerText = translations[language].subtitle;
-            document.getElementById("server-name-label").innerText = translations[language].serverNameLabel;
-            document.getElementById("server-ip-label").innerText = translations[language].serverIpLabel;
-            document.getElementById("create-server-button").innerText = translations[language].createServerButton;
+            document.querySelector('label[for="server-name"]').innerText = translations[language].serverNameLabel;
+            document.querySelector('label[for="server-ip"]').innerText = translations[language].serverIpLabel;
+            document.getElementById("create-server-form").querySelector('button').innerText = translations[language].createServerButton;
             document.getElementById("server-info-title").innerText = translations[language].serverInfoTitle;
             document.getElementById("version-label").innerText = translations[language].versionLabel;
             document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
@@ -398,13 +397,13 @@
             document.querySelector('.login-panel h2').innerText = translations[language].loginHeader;
             document.querySelector('.forgot-password-panel h2').innerText = translations[language].forgotPasswordHeader;
             document.querySelector('.forgot-password-link').innerText = translations[language].forgotPasswordLink;
-            document.getElementById("forgot-password-form button").innerText = translations[language].forgotPasswordButton;
+            document.getElementById("forgot-password-form").querySelector('button').innerText = translations[language].forgotPasswordButton;
             document.getElementById("register-username").placeholder = translations[language].usernameLabel;
             document.getElementById("register-password").placeholder = translations[language].passwordLabel;
             document.getElementById("login-username").placeholder = translations[language].usernameLabel;
             document.getElementById("login-password").placeholder = translations[language].passwordLabel;
-            document.getElementById("register-form button").innerText = translations[language].registerButton;
-            document.getElementById("login-form button").innerText = translations[language].loginButton;
+            document.getElementById("register-form").querySelector('button').innerText = translations[language].registerButton;
+            document.getElementById("login-form").querySelector('button').innerText = translations[language].loginButton;
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
@@ -419,8 +418,7 @@
 
         function showLogin() {
             document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel```html
-            ').style.display = 'block';
+            document.getElementById('login-panel').style.display = 'block';
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('forgot-password-panel').style.display = 'none';
         }
