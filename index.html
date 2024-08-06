@@ -89,7 +89,7 @@
         button:focus {
             transform: scale(1.1);
         }
-        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel, .chat-panel {
+        .server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel, .chat-panel, .bug-chat-panel {
             margin-top: 20px;
             text-align: left;
             width: 100%;
@@ -178,6 +178,9 @@
         .chat-message .owner {
             color: gold;
         }
+        .chat-message .user {
+            color: lightblue;
+        }
         .chart-container {
             margin-top: 40px;
             transition: transform 0.5s;
@@ -192,6 +195,26 @@
         }
         .chart:hover {
             transform: scale(1.05);
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+        .chat-input button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #e74c3c;
+            color: #ecf0f1;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -277,8 +300,26 @@
             <p id="server-ip-display"></p>
         </div>
         
+        <div class="chat-panel" id="chat-panel" style="display:none;">
+            <h2>Сообщественный чат</h2>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input" id="chat-input">
+                <input type="text" id="chat-message" placeholder="Введите сообщение...">
+                <button onclick="sendMessage()">Отправить</button>
+            </div>
+        </div>
+
+        <div class="bug-chat-panel" id="bug-chat-panel" style="display:none;">
+            <h2>Чат багов</h2>
+            <div class="chat-messages" id="bug-chat-messages"></div>
+            <div class="chat-input" id="bug-chat-input">
+                <input type="text" id="bug-chat-message" placeholder="Введите сообщение...">
+                <button onclick="sendBugMessage()">Отправить</button>
+            </div>
+        </div>
+
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.2
+            <span id="version-label">Версия сайта:</span> 3.2.5
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -470,6 +511,24 @@
             document.getElementById('create-server-panel').style.display = 'block';
         }
 
+        function showChat() {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('profile-panel').style.display = 'none';
+            document.getElementById('forgot-password-panel').style.display = 'none';
+            document.getElementById('create-server-panel').style.display = 'none';
+            document.getElementById('chat-panel').style.display = 'block';
+        }
+
+        function showBugChat() {
+            document.getElementById('register-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('profile-panel').style.display = 'none';
+            document.getElementById('forgot-password-panel').style.display = 'none';
+            document.getElementById('create-server-panel').style.display = 'none';
+            document.getElementById('bug-chat-panel').style.display = 'block';
+        }
+
         function goToAdminPanel() {
             window.location.href = 'admin-panel.html';
         }
@@ -478,6 +537,59 @@
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('chat-message').value;
+            const username = document.getElementById('profile-username').innerText;
+            const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+
+            if (!username) {
+                alert('Вы должны войти в аккаунт, чтобы отправлять сообщения.');
+                return;
+            }
+
+            messages.push({ username, message, role: 'user' });
+            localStorage.setItem('chatMessages', JSON.stringify(messages));
+            document.getElementById('chat-message').value = '';
+            displayChatMessages();
+        }
+
+        function sendBugMessage() {
+            const message = document.getElementById('bug-chat-message').value;
+            const username = document.getElementById('profile-username').innerText || 'Гость';
+            const messages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
+
+            messages.push({ username, message, role: 'user' });
+            localStorage.setItem('bugChatMessages', JSON.stringify(messages));
+            document.getElementById('bug-chat-message').value = '';
+            displayBugChatMessages();
+        }
+
+        function displayChatMessages() {
+            const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '';
+
+            messages.forEach(({ username, message, role }) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message');
+                messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
+                chatMessages.appendChild(messageElement);
+            });
+        }
+
+        function displayBugChatMessages() {
+            const messages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
+            const bugChatMessages = document.getElementById('bug-chat-messages');
+            bugChatMessages.innerHTML = '';
+
+            messages.forEach(({ username, message, role }) => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message');
+                messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
+                bugChatMessages.appendChild(messageElement);
+            });
         }
 
         document.getElementById('register-form').addEventListener('submit', function(event) {
@@ -559,7 +671,11 @@
             document.getElementById('create-server-form').reset();
         });
 
-        changeLanguage();
+        window.addEventListener('load', () => {
+            changeLanguage();
+            displayChatMessages();
+            displayBugChatMessages();
+        });
     </script>
 </body>
 </html>
