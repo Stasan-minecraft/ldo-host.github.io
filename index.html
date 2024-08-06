@@ -94,6 +94,7 @@
             text-align: left;
             width: 100%;
             transition: transform 0.5s;
+            display: none;
         }
         .footer {
             margin-top: 20px;
@@ -216,6 +217,20 @@
             color: #ecf0f1;
             cursor: pointer;
         }
+        .close-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #c0392b;
+            border: none;
+            border-radius: 5px;
+            color: #ecf0f1;
+            cursor: pointer;
+            box-shadow: 1px 1px 3px #000000;
+            transition: transform 0.5s;
+        }
+        .close-button:hover {
+            background-color: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -240,7 +255,7 @@
             <button onclick="showBugChat()">Чат багов</button>
         </div>
 
-        <div class="register-panel" id="register-panel" style="display:none;">
+        <div class="register-panel" id="register-panel">
             <h2>Регистрация</h2>
             <form id="register-form">
                 <label for="register-username">Имя пользователя:</label>
@@ -249,9 +264,10 @@
                 <input type="password" id="register-password" required>
                 <button type="submit">Зарегистрироваться</button>
             </form>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
         
-        <div class="login-panel" id="login-panel" style="display:none;">
+        <div class="login-panel" id="login-panel">
             <h2>Вход</h2>
             <form id="login-form">
                 <label for="login-username">Имя пользователя:</label>
@@ -261,18 +277,20 @@
                 <button type="submit">Войти</button>
             </form>
             <p class="forgot-password-link" onclick="showForgotPassword()">Забыли пароль?</p>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
-        <div class="forgot-password-panel" id="forgot-password-panel" style="display:none;">
+        <div class="forgot-password-panel" id="forgot-password-panel">
             <h2>Восстановление пароля</h2>
             <form id="forgot-password-form">
                 <label for="forgot-username">Имя пользователя:</label>
                 <input type="text" id="forgot-username" required>
                 <button type="submit">Отправить</button>
             </form>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
-        <div class="profile-panel" id="profile-panel" style="display:none;">
+        <div class="profile-panel" id="profile-panel">
             <h2>Профиль</h2>
             <p id="profile-username"></p>
             <button id="logout-button" onclick="logout()">Выйти</button>
@@ -287,9 +305,10 @@
                     <canvas id="serverChart"></canvas>
                 </div>
             </div>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
         
-        <div class="create-server-panel" id="create-server-panel" style="display:none;">
+        <div class="create-server-panel" id="create-server-panel">
             <h2>Создать сервер</h2>
             <form id="create-server-form">
                 <label for="server-name">Название сервера:</label>
@@ -298,29 +317,33 @@
                 <input type="text" id="server-ip" required>
                 <button type="submit">Создать</button>
             </form>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
-        <div class="server-info" id="server-info" style="display:none;">
+        <div class="server-info" id="server-info">
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
         
-        <div class="chat-panel" id="chat-panel" style="display:none;">
+        <div class="chat-panel" id="chat-panel">
             <h2>Сообщественный чат</h2>
             <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-input" id="chat-input">
                 <input type="text" id="chat-message" placeholder="Введите сообщение...">
                 <button onclick="sendMessage()">Отправить</button>
             </div>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
-        <div class="bug-chat-panel" id="bug-chat-panel" style="display:none;">
+        <div class="bug-chat-panel" id="bug-chat-panel">
             <h2>Чат багов</h2>
             <div class="chat-messages" id="bug-chat-messages"></div>
             <div class="chat-input" id="bug-chat-input">
                 <input type="text" id="bug-chat-message" placeholder="Введите сообщение...">
                 <button onclick="sendBugMessage()">Отправить</button>
             </div>
+            <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
         <div class="footer">
@@ -456,24 +479,18 @@
         }
 
         function showRegister() {
+            hideAllPanels();
             document.getElementById('register-panel').style.display = 'block';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
         }
 
         function showLogin() {
-            document.getElementById('register-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('login-panel').style.display = 'block';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
         }
 
         function showProfile(username) {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('profile-panel').style.display = 'block';
-            document.getElementById('forgot-password-panel').style.display = 'none';
             document.getElementById('profile-username').innerText = username;
 
             let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
@@ -502,35 +519,22 @@
         }
 
         function showForgotPassword() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('forgot-password-panel').style.display = 'block';
         }
 
         function showCreateServer() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('create-server-panel').style.display = 'block';
         }
 
         function showChat() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
-            document.getElementById('create-server-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('chat-panel').style.display = 'block';
         }
 
         function showBugChat() {
-            document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'none';
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('forgot-password-panel').style.display = 'none';
-            document.getElementById('create-server-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('bug-chat-panel').style.display = 'block';
         }
 
@@ -539,8 +543,7 @@
         }
 
         function logout() {
-            document.getElementById('profile-panel').style.display = 'none';
-            document.getElementById('register-panel').style.display = 'none';
+            hideAllPanels();
             document.getElementById('login-panel').style.display = 'block';
         }
 
@@ -594,6 +597,16 @@
                 messageElement.classList.add('chat-message');
                 messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
                 bugChatMessages.appendChild(messageElement);
+            });
+        }
+
+        function closeWindow() {
+            hideAllPanels();
+        }
+
+        function hideAllPanels() {
+            document.querySelectorAll('.server-info, .login-panel, .register-panel, .profile-panel, .forgot-password-panel, .create-server-panel, .chat-panel, .bug-chat-panel').forEach(panel => {
+                panel.style.display = 'none';
             });
         }
 
