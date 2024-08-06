@@ -272,7 +272,7 @@
         </div>
 
         <div class="profile-buttons" id="profile-buttons" style="display:none;">
-            <button onclick="showProfile()">Аккаунт</button>
+            <button onclick="showProfilePanel()">Аккаунт</button>
             <button onclick="logout()">Выйти</button>
         </div>
 
@@ -374,7 +374,7 @@
         </div>
 
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.8
+            <span id="version-label">Версия сайта:</span> 3.2.9
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -528,6 +528,15 @@
             document.getElementById('login-panel').style.display = 'block';
         }
 
+        function showProfilePanel() {
+            const username = localStorage.getItem('currentUser');
+            if (username) {
+                showProfile(username);
+            } else {
+                alert('Вы должны войти в аккаунт, чтобы просматривать профиль.');
+            }
+        }
+
         function showProfile(username) {
             hideAllPanels();
             document.getElementById('profile-panel').style.display = 'block';
@@ -592,6 +601,7 @@
             document.getElementById('login-panel').style.display = 'block';
             document.getElementById('auth-buttons').style.display = 'flex';
             document.getElementById('profile-buttons').style.display = 'none';
+            localStorage.removeItem('currentUser');
         }
 
         function sendMessage() {
@@ -748,6 +758,7 @@
                 alert('Вход выполнен успешно');
                 document.getElementById('auth-buttons').style.display = 'none';
                 document.getElementById('profile-buttons').style.display = 'flex';
+                localStorage.setItem('currentUser', username);
                 showProfile(username);
             } else {
                 alert('Неверное имя пользователя или пароль');
