@@ -36,7 +36,7 @@
             font-size: 1.2em;
             color: #bdc3c7;
         }
-        .logout-button, .make-admin-button, .change-password-button, .ban-button, .add-server-button, .remove-server-button, .update-server-button, .clear-chat-button, .clear-bug-chat-button {
+        .logout-button, .make-admin-button, .change-password-button, .ban-button, .add-server-button, .remove-server-button, .update-server-button {
             padding: 15px 30px;
             border: none;
             background-color: #e74c3c;
@@ -47,7 +47,7 @@
             transition: background-color 0.3s;
             margin-top: 20px;
         }
-        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover, .ban-button:hover, .add-server-button:hover, .remove-server-button:hover, .update-server-button:hover, .clear-chat-button:hover, .clear-bug-chat-button:hover {
+        .logout-button:hover, .make-admin-button:hover, .change-password-button:hover, .ban-button:hover, .add-server-button:hover, .remove-server-button:hover, .update-server-button:hover {
             background-color: #c0392b;
         }
         input[type="text"], input[type="password"] {
@@ -89,8 +89,6 @@
         <button class="add-server-button" onclick="addServer()">Добавить сервер</button>
         <button class="remove-server-button" onclick="removeServer()">Удалить сервер</button>
         <button class="update-server-button" onclick="updateServer()">Обновить сервер</button>
-        <button class="clear-chat-button" onclick="clearChat()">Очистить сообщественный чат</button>
-        <button class="clear-bug-chat-button" onclick="clearBugChat()">Очистить чат багов</button>
         <div class="server-list" id="server-list"></div>
         <button class="logout-button" onclick="logout()">Выйти</button>
     </div>
@@ -210,16 +208,6 @@
             }
             
             displayServers();
-        }
-
-        function clearChat() {
-            localStorage.removeItem('chatMessages');
-            alert('Сообщественный чат очищен');
-        }
-
-        function clearBugChat() {
-            localStorage.removeItem('bugChatMessages');
-            alert('Чат багов очищен');
         }
 
         function displayServers() {
