@@ -36,12 +36,14 @@
             color: #e74c3c;
             font-size: 2.5em;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #000000;
             transition: transform 0.5s;
         }
         p#subtitle {
             font-size: 1.2em;
             margin-bottom: 40px;
             color: #bdc3c7;
+            text-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         form {
@@ -53,6 +55,7 @@
         label {
             color: #e74c3c;
             font-size: 1.1em;
+            text-shadow: 1px 1px 3px #000000;
         }
         input[type="text"], input[type="password"], select {
             padding: 10px;
@@ -63,6 +66,7 @@
             font-size: 1em;
             width: 100%;
             max-width: 400px;
+            box-shadow: inset 1px 1px 2px #000000;
             transition: transform 0.5s;
         }
         input[type="text"]:focus, input[type="password"]:focus, select:focus {
@@ -76,6 +80,7 @@
             border-radius: 5px;
             font-size: 1.1em;
             cursor: pointer;
+            box-shadow: 3px 3px 6px #000000;
             transition: transform 0.5s;
         }
         button:hover {
@@ -94,6 +99,7 @@
             margin-top: 20px;
             color: #bdc3c7;
             font-size: 0.9em;
+            text-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         .language-selector {
@@ -109,6 +115,7 @@
             border-radius: 5px;
             font-size: 1em;
             cursor: pointer;
+            box-shadow: 1px 1px 3px #000000;
             transition: background-color 0.3s, transform 0.5s;
         }
         .language-selector select:hover {
@@ -118,6 +125,7 @@
             font-size: 1em;
             margin-top: 20px;
             color: #bdc3c7;
+            text-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         .auth-buttons {
@@ -145,6 +153,7 @@
             border-radius: 5px;
             margin-bottom: 10px;
             color: #ecf0f1;
+            box-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         .server-item:hover {
@@ -157,6 +166,7 @@
             max-height: 300px;
             overflow-y: auto;
             margin-bottom: 20px;
+            box-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         .chat-message {
@@ -177,34 +187,11 @@
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
+            box-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
         .chart:hover {
             transform: scale(1.05);
-        }
-        .chat-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .chat-tabs button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #e74c3c;
-            color: #ecf0f1;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.5s;
-        }
-        .chat-tabs button:hover {
-            background-color: #c0392b;
-        }
-        .chat-panel {
-            display: none;
-        }
-        .chat-panel.active {
-            display: block;
         }
     </style>
 </head>
@@ -253,13 +240,13 @@
             <form id="forgot-password-form">
                 <label for="forgot-username">Имя пользователя:</label>
                 <input type="text" id="forgot-username" required>
-                <button type="submit">Отправить</button>
+                <button type="```html
+                    Отправить</button>
             </form>
         </div>
 
         <div class="profile-panel" id="profile-panel" style="display:none;">
             <h2>Профиль</h2>
-```html
             <p id="profile-username"></p>
             <button onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
@@ -290,42 +277,9 @@
             <h2 id="server-info-title">Информация о сервере</h2>
             <p id="server-ip-display"></p>
         </div>
-
-        <div class="chat-tabs">
-            <button onclick="showChat('community-chat')">Сообщественный чат</button>
-            <button onclick="showChat('bug-chat')">Чат багов</button>
-            <button onclick="showChat('idea-chat')">Чат идей</button>
-        </div>
-
-        <div class="chat-panel" id="community-chat" style="display:none;">
-            <h2>Сообщественный чат</h2>
-            <div class="chat-messages" id="community-chat-messages"></div>
-            <form id="community-chat-form" style="display:none;">
-                <input type="text" id="community-chat-input" placeholder="Введите сообщение..." required>
-                <button type="submit">Отправить</button>
-            </form>
-        </div>
-
-        <div class="chat-panel" id="bug-chat" style="display:none;">
-            <h2>Чат багов</h2>
-            <div class="chat-messages" id="bug-chat-messages"></div>
-            <form id="bug-chat-form" style="display:none;">
-                <input type="text" id="bug-chat-input" placeholder="Введите сообщение..." required>
-                <button type="submit">Отправить</button>
-            </form>
-        </div>
-
-        <div class="chat-panel" id="idea-chat" style="display:none;">
-            <h2>Чат идей</h2>
-            <div class="chat-messages" id="idea-chat-messages"></div>
-            <form id="idea-chat-form" style="display:none;">
-                <input type="text" id="idea-chat-input" placeholder="Введите сообщение..." required>
-                <button type="submit">Отправить</button>
-            </form>
-        </div>
         
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.1
+            <span id="version-label">Версия сайта:</span> 3.2.1
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -442,8 +396,7 @@
             document.getElementById("email-instruction").innerText = translations[language].emailInstruction;
             document.querySelector('.register-panel h2').innerText = translations[language].registerHeader;
             document.querySelector('.login-panel h2').innerText = translations[language].loginHeader;
-            document.querySelector('.forgot-password-panel h2').innerText = translations[language```html
-                .forgotPasswordHeader;
+            document.querySelector('.forgot-password-panel h2').innerText = translations[language].forgotPasswordHeader;
             document.querySelector('.forgot-password-link').innerText = translations[language].forgotPasswordLink;
             document.getElementById("forgot-password-form button").innerText = translations[language].forgotPasswordButton;
             document.getElementById("register-username").placeholder = translations[language].usernameLabel;
@@ -455,15 +408,6 @@
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
-            document.querySelector('#community-chat h2').innerText = translations[language].chatHeader;
-            document.getElementById("community-chat-input").placeholder = translations[language].chatPlaceholder;
-            document.getElementById("community-chat-form button").innerText = translations[language].chatSendButton;
-            document.querySelector('#bug-chat h2').innerText = translations[language].bugChatHeader;
-            document.getElementById("bug-chat-input").placeholder = translations[language].chatPlaceholder;
-            document.getElementById("bug-chat-form button").innerText = translations[language].chatSendButton;
-            document.querySelector('#idea-chat h2').innerText = translations[language].ideaChatHeader;
-            document.getElementById("idea-chat-input").placeholder = translations[language].chatPlaceholder;
-            document.getElementById("idea-chat-form button").innerText = translations[language].chatSendButton;
         }
 
         function showRegister() {
@@ -475,7 +419,8 @@
 
         function showLogin() {
             document.getElementById('register-panel').style.display = 'none';
-            document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('login-panel```html
+            ').style.display = 'block';
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('forgot-password-panel').style.display = 'none';
         }
@@ -497,14 +442,6 @@
             }
 
             displayUserServers(username);
-
-            document.getElementById('chat-panel').style.display = 'block';
-            document.getElementById('community-chat-form').style.display = 'block';
-            document.getElementById('bug-chat-form').style.display = 'block';
-            document.getElementById('idea-chat-form').style.display = 'block';
-            loadChatMessages('community-chat');
-            loadChatMessages('bug-chat');
-            loadChatMessages('idea-chat');
         }
 
         function displayUserServers(username) {
@@ -543,10 +480,6 @@
             document.getElementById('profile-panel').style.display = 'none';
             document.getElementById('register-panel').style.display = 'none';
             document.getElementById('login-panel').style.display = 'block';
-            document.getElementById('chat-panel').style.display = 'none';
-            document.getElementById('community-chat-form').style.display = 'none';
-            document.getElementById('bug-chat-form').style.display = 'none';
-            document.getElementById('idea-chat-form').style.display = 'none';
         }
 
         document.getElementById('register-form').addEventListener('submit', function(event) {
@@ -627,78 +560,6 @@
             alert('Запрос на создание сервера отправлен');
             document.getElementById('create-server-form').reset();
         });
-
-        document.getElementById('community-chat-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const message = document.getElementById('community-chat-input').value;
-            const username = document.getElementById('profile-username').innerText;
-
-            let chatMessages = JSON.parse(localStorage.getItem('communityChatMessages')) || [];
-            chatMessages.push({```html
-                username, message });
-            localStorage.setItem('communityChatMessages', JSON.stringify(chatMessages));
-
-            document.getElementById('community-chat-input').value = '';
-            loadChatMessages('community-chat');
-        });
-
-        document.getElementById('bug-chat-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const message = document.getElementById('bug-chat-input').value;
-            const username = document.getElementById('profile-username').innerText;
-
-            let chatMessages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
-            chatMessages.push({ username, message });
-            localStorage.setItem('bugChatMessages', JSON.stringify(chatMessages));
-
-            document.getElementById('bug-chat-input').value = '';
-            loadChatMessages('bug-chat');
-        });
-
-        document.getElementById('idea-chat-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const message = document.getElementById('idea-chat-input').value;
-            const username = document.getElementById('profile-username').innerText;
-
-            let chatMessages = JSON.parse(localStorage.getItem('ideaChatMessages')) || [];
-            chatMessages.push({ username, message });
-            localStorage.setItem('ideaChatMessages', JSON.stringify(chatMessages));
-
-            document.getElementById('idea-chat-input').value = '';
-            loadChatMessages('idea-chat');
-        });
-
-        function loadChatMessages(chatType) {
-            const chatMessages = JSON.parse(localStorage.getItem(`${chatType}Messages`)) || [];
-            const chatMessagesContainer = document.getElementById(`${chatType}-messages`);
-            chatMessagesContainer.innerHTML = '';
-            chatMessages.forEach(({ username, message }) => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('chat-message');
-
-                if (username.toLowerCase() === 'credesasq') {
-                    messageElement.classList.add('owner');
-                    messageElement.innerHTML = `<strong>OWNER: ${username}:</strong> ${message}`;
-                } else {
-                    let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
-                    const account = accounts.find(account => account.username.toLowerCase() === username.toLowerCase());
-                    if (account && account.role === 'admin') {
-                        messageElement.classList.add('admin');
-                        messageElement.innerHTML = `<strong>ADMIN: ${username}:</strong> ${message}`;
-                    } else {
-                        messageElement.innerHTML = `<strong>${username}:</strong> ${message}`;
-                    }
-                }
-                chatMessagesContainer.appendChild(messageElement);
-            });
-        }
-
-        function showChat(chatId) {
-            document.querySelectorAll('.chat-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
-            document.getElementById(chatId).classList.add('active');
-        }
 
         changeLanguage();
     </script>
