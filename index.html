@@ -129,7 +129,7 @@
             text-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
-        .auth-buttons, .chat-buttons {
+        .auth-buttons, .chat-buttons, .profile-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
@@ -266,9 +266,14 @@
         <h1 id="title">Бесплатный хост: Создание серверов Ldo-Host</h1>
         <p id="subtitle">От создателей Lock Darkman Online</p>
 
-        <div class="auth-buttons">
+        <div class="auth-buttons" id="auth-buttons">
             <button onclick="showRegister()">Создать аккаунт</button>
             <button onclick="showLogin()">Войти</button>
+        </div>
+
+        <div class="profile-buttons" id="profile-buttons" style="display:none;">
+            <button onclick="showProfile()">Аккаунт</button>
+            <button onclick="logout()">Выйти</button>
         </div>
 
         <div class="chat-buttons">
@@ -314,9 +319,9 @@
         <div class="profile-panel" id="profile-panel">
             <h2>Профиль</h2>
             <p id="profile-username"></p>
-            <button id="logout-button" onclick="logout()">Выйти</button>
             <button id="admin-button" style="display:none;" onclick="goToAdminPanel()">Админ Панель</button>
             <button id="create-server-button" onclick="showCreateServer()">Создать сервер</button>
+            <button id="user-account-button" onclick="goToUserAccount()">Перейти на профиль</button>
             <div class="server-list" id="server-list"></div>
             <div class="chart-container">
                 <div class="chart">
@@ -408,7 +413,9 @@
                 chatPlaceholder: "Введите сообщение...",
                 chatSendButton: "Отправить",
                 likeButton: "Лайк",
-                attachScreenshot: "Прикрепить скриншот"
+                attachScreenshot: "Прикрепить скриншот",
+                accountButton: "Аккаунт",
+                goToProfileButton: "Перейти на профиль"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -442,7 +449,9 @@
                 chatPlaceholder: "Введіть повідомлення...",
                 chatSendButton: "Надіслати",
                 likeButton: "Лайк",
-                attachScreenshot: "Додати скриншот"
+                attachScreenshot: "Додати скриншот",
+                accountButton: "Аккаунт",
+                goToProfileButton: "Перейти на профіль"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -476,7 +485,9 @@
                 chatPlaceholder: "Enter your message...",
                 chatSendButton: "Send",
                 likeButton: "Like",
-                attachScreenshot: "Attach Screenshot"
+                attachScreenshot: "Attach Screenshot",
+                accountButton: "Account",
+                goToProfileButton: "Go to Profile"
             }
         };
 
@@ -504,6 +515,7 @@
             document.querySelector('.profile-panel h2').innerText = translations[language].profileHeader;
             document.getElementById('logout-button').innerText = translations[language].logoutButton;
             document.getElementById('admin-button').innerText = translations[language].adminButton;
+            document.getElementById('user-account-button').innerText = translations[language].goToProfileButton;
         }
 
         function showRegister() {
@@ -570,9 +582,16 @@
             window.location.href = 'admin-panel.html';
         }
 
+        function goToUserAccount() {
+            const username = document.getElementById('profile-username').innerText;
+            window.location.href = `https://stasan-minecraft.github.io/ldo-host.github.io/index.html/${username}`;
+        }
+
         function logout() {
             hideAllPanels();
             document.getElementById('login-panel').style.display = 'block';
+            document.getElementById('auth-buttons').style.display = 'flex';
+            document.getElementById('profile-buttons').style.display = 'none';
         }
 
         function sendMessage() {
@@ -727,6 +746,8 @@
 
             if (account) {
                 alert('Вход выполнен успешно');
+                document.getElementById('auth-buttons').style.display = 'none';
+                document.getElementById('profile-buttons').style.display = 'flex';
                 showProfile(username);
             } else {
                 alert('Неверное имя пользователя или пароль');
