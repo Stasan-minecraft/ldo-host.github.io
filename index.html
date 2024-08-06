@@ -57,7 +57,7 @@
             font-size: 1.1em;
             text-shadow: 1px 1px 3px #000000;
         }
-        input[type="text"], input[type="password"], select {
+        input[type="text"], input[type="password"], input[type="file"], select {
             padding: 10px;
             border: none;
             border-radius: 5px;
@@ -247,6 +247,11 @@
         .reply-button:hover {
             color: #e74c3c;
         }
+        .image-container img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -357,13 +362,14 @@
             <div class="chat-messages" id="bug-chat-messages"></div>
             <div class="chat-input" id="bug-chat-input">
                 <input type="text" id="bug-chat-message" placeholder="Введите сообщение...">
+                <input type="file" id="bug-chat-screenshot" accept="image/*">
                 <button onclick="sendBugMessage()">Отправить</button>
             </div>
             <button class="close-button" onclick="closeWindow()">Закрыть окно</button>
         </div>
 
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.7
+            <span id="version-label">Версия сайта:</span> 3.2.8
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
@@ -401,7 +407,8 @@
                 ideaChatHeader: "Чат идей",
                 chatPlaceholder: "Введите сообщение...",
                 chatSendButton: "Отправить",
-                likeButton: "Лайк"
+                likeButton: "Лайк",
+                attachScreenshot: "Прикрепить скриншот"
             },
             ua: {
                 title: "Безкоштовний хост: Створення серверів Ldo-Host",
@@ -434,7 +441,8 @@
                 ideaChatHeader: "Чат ідей",
                 chatPlaceholder: "Введіть повідомлення...",
                 chatSendButton: "Надіслати",
-                likeButton: "Лайк"
+                likeButton: "Лайк",
+                attachScreenshot: "Додати скриншот"
             },
             en: {
                 title: "Free Host: Creating Ldo-Host Servers",
@@ -467,7 +475,8 @@
                 ideaChatHeader: "Idea Chat",
                 chatPlaceholder: "Enter your message...",
                 chatSendButton: "Send",
-                likeButton: "Like"
+                likeButton: "Like",
+                attachScreenshot: "Attach Screenshot"
             }
         };
 
@@ -587,10 +596,25 @@
             const username = document.getElementById('profile-username').innerText || 'Гость';
             const messages = JSON.parse(localStorage.getItem('bugChatMessages')) || [];
 
-            messages.push({ username, message, role: 'user' });
-            localStorage.setItem('bugChatMessages', JSON.stringify(messages));
-            document.getElementById('bug-chat-message').value = '';
-            displayBugChatMessages();
+            let screenshot = null;
+            const fileInput = document.getElementById('bug-chat-screenshot');
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    screenshot = event.target.result;
+                    messages.push({ username, message, role: 'user', screenshot });
+                    localStorage.setItem('bugChatMessages', JSON.stringify(messages));
+                    document.getElementById('bug-chat-message').value = '';
+                    document.getElementById('bug-chat-screenshot').value = '';
+                    displayBugChatMessages();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                messages.push({ username, message, role: 'user' });
+                localStorage.setItem('bugChatMessages', JSON.stringify(messages));
+                document.getElementById('bug-chat-message').value = '';
+                displayBugChatMessages();
+            }
         }
 
         function displayChatMessages() {
@@ -611,13 +635,19 @@
             const bugChatMessages = document.getElementById('bug-chat-messages');
             bugChatMessages.innerHTML = '';
 
-            messages.forEach(({ username, message, role }, index) => {
+            messages.forEach(({ username, message, role, screenshot }, index) => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
                 if (role === 'admin') {
                     messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message}`;
                 } else {
                     messageElement.innerHTML = `<span class="${role}">${username}:</span> ${message} <span class="reply-button" onclick="replyToMessage(${index})">Ответить</span>`;
+                }
+                if (screenshot) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.classList.add('image-container');
+                    imageContainer.innerHTML = `<img src="${screenshot}" alt="Скриншот">`;
+                    messageElement.appendChild(imageContainer);
                 }
                 bugChatMessages.appendChild(messageElement);
             });
