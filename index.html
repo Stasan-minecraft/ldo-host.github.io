@@ -128,7 +128,7 @@
             text-shadow: 1px 1px 3px #000000;
             transition: transform 0.5s;
         }
-        .auth-buttons {
+        .auth-buttons, .chat-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
@@ -235,6 +235,11 @@
             <button onclick="showLogin()">Войти</button>
         </div>
 
+        <div class="chat-buttons">
+            <button onclick="showChat()">Сообщественный чат</button>
+            <button onclick="showBugChat()">Чат багов</button>
+        </div>
+
         <div class="register-panel" id="register-panel" style="display:none;">
             <h2>Регистрация</h2>
             <form id="register-form">
@@ -319,7 +324,7 @@
         </div>
 
         <div class="footer">
-            <span id="version-label">Версия сайта:</span> 3.2.5
+            <span id="version-label">Версия сайта:</span> 3.2.6
         </div>
         <p id="email-instruction">Для создания сервера отправьте название сервера и IP-адрес на почту: stasikgnidan@gmail.com</p>
     </div>
